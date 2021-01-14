@@ -1,0 +1,25 @@
+{
+    "name": "code-bureau/firstagenda-php-client",
+    "description": "",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jóhan H Dam-Davidsen",
+            "email": "johan@code-bureau.gl"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "^7.0",
+        "nesbot/carbon": "^2.43",
+        "vlucas/phpdotenv": "^5.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
+    "autoload": {
+        "classmap": [
+            "src/"
+        ]
+    }
+}

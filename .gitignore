@@ -1,0 +1,12 @@
+# PHPUNIT
+.phpunit.cache
+
+# Composer
+vendor
+composer.lock
+
+# Environmental variables
+.env
+
+#
+.idea

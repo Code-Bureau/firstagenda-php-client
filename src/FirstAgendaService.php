@@ -2,6 +2,7 @@
 
 namespace CodeBureau\FirstAgendaApi;
 
+use CodeBureau\FirstAgendaApi\Messages\Agenda;
 use CodeBureau\FirstAgendaApi\Messages\ApiResponse;
 use Carbon\Carbon;
 use CodeBureau\FirstAgendaApi\Messages\Committee;
@@ -37,16 +38,39 @@ class FirstAgendaService {
         );
     }
 
+    public function getAgendasByCommittee ($committeeUid, $pageNumber = '', $pageSize = '', $sortDirection = '', $agendaMeetingBeginFrom = '', $agendaMeetingBeginTo = '', $searchContent = '')
+    {
+        $response = $this->makeGETRequest('agenda/list/bycommittee/' . $committeeUid);
+        $agendas = $response->getMessage();
+        foreach($agendas as $key => $agn) {
+            $agenda = new Agenda();
+            $agenda
+                ->setAgendaUid($agn->AgendaUid)
+                ->setOrganisationUid($agn->OrganisationUid)
+                ->setName($agn->Name)
+                ->setSourceId($agn->SourceId)
+                ->setElasticSearchResults($agn->ElasticSearchResults)
+                ->setMeetingBeginFromUtc($agn->MeetingBeginFromUtc)
+                ->setMeetingEndUtc($agn->MeetingEndUtc)
+                ->setReleasedDate($agn->ReleasedDate)
+                ->setMinutesOfMeeting($agn->MinutesOfMeeting)
+                ->setMeetingLocation($agn->MeetingLocation);
+            $agendas[$key] = $agenda;
+        }
+        return $agendas;
+    }
+
     /**
      * @param string $uuid
      * @param string $corporationUuid
      * @param Carbon|null $publicationDate
-     * @return Exception
+     * @return array
+     * @throws Exception
      */
-    public function getOrganizations($uuid = null, $corporationUuid = '', Carbon $publicationDate = null)
+    public function getOrganizations($uuid = null, $corporationUuid = '', Carbon $publicationDate = null): array
     {
         if (empty($uuid)) {
-            return new Exception('Missing parameters UUID');
+            throw new Exception('Missing parameters UUID');
         }
 
         $response = $this->makeGETRequest('committee/list/byorganisation/' . $uuid);
@@ -72,7 +96,7 @@ class FirstAgendaService {
      * @param null $url
      * @return ApiResponse
      */
-    private function makeGETRequest($url = null)
+    private function makeGETRequest($url = null): ApiResponse
     {
         $authToken = $this->tokenService->getAuthToken();
 

@@ -26,8 +26,13 @@ class OAuthToken {
     /**
      * @return bool
      */
-    public function isExpired ()
+    public function isExpired()
     {
         return $this->expiresAt->isPast();
+    }
+
+    public function getToken()
+    {
+        return $this->token;
     }
 }

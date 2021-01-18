@@ -26,7 +26,7 @@ class TokenService
         $dotenv->load();
 
         $this->client = new Client([
-            'base_uri' => 'https://identity.firstagenda.com/connect/token',
+            'base_uri' => 'https://identity.firstagenda.com',
             'timeout'  => 2.0,
             'headers' => [
                 'Content-Type' => 'application/x-www-form-urlencoded',
@@ -41,7 +41,7 @@ class TokenService
     public function getNewAuthToken ()
     {
         try {
-            $responseRaw = $this->client -> post('/connect/token', [
+            $responseRaw = $this->client->post('/connect/token', [
                         'form_params' => [
                             'grant_type' => 'client_credentials',
                             'scope' => 'prepare_integrationapi',
@@ -54,6 +54,8 @@ class TokenService
 
             // Map response object
             $response = json_decode($responseRaw);
+
+            //print_r($response);
             $token = $response->access_token;
             $expiryDate = Carbon::now()->addSeconds($response->expires_in);
 

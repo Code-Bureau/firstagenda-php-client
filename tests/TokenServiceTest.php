@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 class TokenServiceTest extends TestCase
 {
     /**
-     * @covers \CodeBureau\FirstAgendaApi\Service
+     * @covers \CodeBureau\FirstAgendaApi\TokenService
      * @test
      */
     public function getAccessToken()

@@ -46,32 +46,15 @@ class FirstAgendaService {
      * @param string $agendaMeetingBeginFrom
      * @param string $agendaMeetingBeginTo
      * @param string $searchContent
-     * @return mixed|null
+     * @return array|null
      */
-    public function getAgendasByCommittee($committeeUid, $pageNumber = '', $pageSize = '', $sortDirection = '', $agendaMeetingBeginFrom = '', $agendaMeetingBeginTo = '', $searchContent = '')
+    public function getAgendasByCommittee($committeeUid, $pageNumber = '', $pageSize = '', $sortDirection = '', $agendaMeetingBeginFrom = '', $agendaMeetingBeginTo = '', $searchContent = ''): ?array
     {
         $response = $this->makeGETRequest('agenda/list/bycommittee/' . $committeeUid);
-        $agendas = $response->getMessage();
-        foreach($agendas as $key => $agn) {
-            $agenda = new Agenda();
-            $agenda
-                ->setAgendaUid($agn->AgendaUid)
-                ->setOrganisationUid($agn->OrganisationUid)
-                ->setName($agn->Name)
-                ->setSourceId($agn->SourceId)
-                ->setElasticSearchResults($agn->ElasticSearchResults)
-                ->setMeetingBeginUtc($agn->MeetingBeginFromUtc)
-                ->setMeetingEndUtc($agn->MeetingEndUtc)
-                ->setReleasedDate($agn->ReleasedDate)
-                ->setMinutesOfMeeting($agn->MinutesOfMeeting)
-                ->setMeetingLocation($agn->MeetingLocation);
-            $agendas[$key] = $agenda;
-        }
-        return $agendas;
+        return $this->mapJSONtoAgenda($response->getMessage());
     }
 
     /**
-     * TODO:
      *
      * @param $organizationUid
      * @param int $pageNumber
@@ -80,10 +63,12 @@ class FirstAgendaService {
      * @param null $agendaMeetingBeginFrom
      * @param null $agendaMeetingBeginTo
      * @param null $searchContent
+     * @return array
      */
-    public function getAgendasByOrganization($organizationUid, $pageNumber = 0, $pageSize = 15, $sortDirection = 0, $agendaMeetingBeginFrom = null, $agendaMeetingBeginTo = null, $searchContent = null)
+    public function getAgendasByOrganization($organizationUid, $pageNumber = 0, $pageSize = 15, $sortDirection = 0, $agendaMeetingBeginFrom = null, $agendaMeetingBeginTo = null, $searchContent = null): array
     {
-
+        $response = $this->makeGETRequest('agenda/list/byorganisation/' . $organizationUid);
+        return $this->mapJSONtoAgenda($response->getMessage());
     }
 
     /**
@@ -211,6 +196,36 @@ class FirstAgendaService {
     public function getAllOrganizations($pageNumber = 0, $pageSize = 15, $sortDirection = null)
     {
 
+    }
+
+    /**
+     * @param array $agendas
+     * @return array
+     */
+    private function mapJSONtoAgenda(array $agendas): array
+    {
+        foreach($agendas as $key => $agn) {
+            $agenda = new Agenda();
+            $agenda
+                ->setAgendaUid($agn->AgendaUid)
+                ->setOrganisationUid($agn->OrganisationUid)
+                ->setName($agn->Name)
+                ->setSourceId($agn->SourceId)
+                ->setElasticSearchResults($agn->ElasticSearchResults)
+                ->setMeetingEndUtc($agn->MeetingEndUtc)
+                ->setReleasedDate($agn->ReleasedDate)
+                ->setMinutesOfMeeting($agn->MinutesOfMeeting)
+                ->setMeetingLocation($agn->MeetingLocation);
+
+            if (isset($agn->MeetingBeginFromUtc)) {
+                $agenda->setMeetingBeginUtc($agn->MeetingBeginFromUtc);
+            } else {
+                $agenda->setMeetingBeginUtc($agn->MeetingBeginUtc);
+            }
+
+            $agendas[$key] = $agenda;
+        }
+        return $agendas;
     }
 
     /**

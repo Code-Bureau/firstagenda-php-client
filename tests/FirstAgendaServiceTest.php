@@ -21,6 +21,17 @@ class FirstAgendaServiceTest extends TestCase
     }
 
     /**
+     * @covers CodeBureau\FirstAgendaApi\FirstAgendaService::getAgendasByOrganization
+     * @test
+     */
+    public function getAgendasByOrganization()
+    {
+        $service = new FirstAgendaService();
+        $agendas = $service->getAgendasByOrganization('29f6672e-d63c-438d-bddc-5d3fc45e8270');
+        self::assertIsArray($agendas);
+    }
+
+    /**
      * @covers CodeBureau\FirstAgendaApi\FirstAgendaService::getAgenda
      * @test
      */

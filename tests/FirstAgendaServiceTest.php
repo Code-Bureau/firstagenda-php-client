@@ -24,7 +24,7 @@ class FirstAgendaServiceTest extends TestCase
     public function getOrganizations()
     {
         $service = new FirstAgendaService();
-        $organizations = $service->getOrganizations('29f6672e-d63c-438d-bddc-5d3fc45e8270');
+        $organizations = $service->getCommitteesInOrganizations('29f6672e-d63c-438d-bddc-5d3fc45e8270');
         self::assertIsArray($organizations, 'Expected array with objects of type CodeBureau\FirstAgendaApi\Messages\Committee');
     }
 

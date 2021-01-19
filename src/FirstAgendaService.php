@@ -38,7 +38,17 @@ class FirstAgendaService {
         );
     }
 
-    public function getAgendasByCommittee ($committeeUid, $pageNumber = '', $pageSize = '', $sortDirection = '', $agendaMeetingBeginFrom = '', $agendaMeetingBeginTo = '', $searchContent = '')
+    /**
+     * @param $committeeUid
+     * @param string $pageNumber
+     * @param string $pageSize
+     * @param string $sortDirection
+     * @param string $agendaMeetingBeginFrom
+     * @param string $agendaMeetingBeginTo
+     * @param string $searchContent
+     * @return mixed|null
+     */
+    public function getAgendasByCommittee($committeeUid, $pageNumber = '', $pageSize = '', $sortDirection = '', $agendaMeetingBeginFrom = '', $agendaMeetingBeginTo = '', $searchContent = '')
     {
         $response = $this->makeGETRequest('agenda/list/bycommittee/' . $committeeUid);
         $agendas = $response->getMessage();
@@ -61,13 +71,51 @@ class FirstAgendaService {
     }
 
     /**
+     * TODO:
+     *
+     * @param $organizationUid
+     * @param int $pageNumber
+     * @param int $pageSize
+     * @param int $sortDirection
+     * @param null $agendaMeetingBeginFrom
+     * @param null $agendaMeetingBeginTo
+     * @param null $searchContent
+     */
+    public function getAgendasByOrganization($organizationUid, $pageNumber = 0, $pageSize = 15, $sortDirection = 0, $agendaMeetingBeginFrom = null, $agendaMeetingBeginTo = null, $searchContent = null)
+    {
+
+    }
+
+    /**
+     * TODO:
+     *
+     * @param $agendaUid
+     */
+    public function getAgenda($agendaUid)
+    {
+
+    }
+
+    /**
+     * TODO:
+     *
+     * @param $agendaItemUid
+     * @param null $includePrefixOnClosedItems
+     * @param null $preserveInlineStyling
+     */
+    public function getAgendaItem($agendaItemUid, $includePrefixOnClosedItems = null, $preserveInlineStyling = null )
+    {
+
+    }
+
+    /**
      * @param string $uuid
      * @param string $corporationUuid
      * @param Carbon|null $publicationDate
      * @return array
      * @throws Exception
      */
-    public function getOrganizations($uuid = null, $corporationUuid = '', Carbon $publicationDate = null): array
+    public function getCommitteesInOrganizations($uuid = null, $corporationUuid = '', Carbon $publicationDate = null): array
     {
         if (empty($uuid)) {
             throw new Exception('Missing parameters UUID');
@@ -93,10 +141,62 @@ class FirstAgendaService {
     }
 
     /**
-     * @param null $url
+     * TODO:
+     *
+     * @param int $pageNumber
+     * @param int $pageSize
+     * @param null $sortDirection
+     */
+    public function getAllCommitteesAvailable($pageNumber = 0, $pageSize = 15, $sortDirection = null)
+    {
+
+    }
+
+    /**
+     * TODO:
+     */
+    public function getCorporationDetails()
+    {
+
+    }
+
+    /**
+     * TODO:
+     *
+     * @param $documentUid
+     */
+    public function getPDFDocument($documentUid)
+    {
+
+    }
+
+    /**
+     * TODO:
+     *
+     * @param $documentUid
+     */
+    public function getPDFUrl($documentUid)
+    {
+
+    }
+
+    /**
+     * TODO:
+     *
+     * @param int $pageNumber
+     * @param int $pageSize
+     * @param null $sortDirection
+     */
+    public function getAllOrganizations($pageNumber = 0, $pageSize = 15, $sortDirection = null)
+    {
+
+    }
+
+    /**
+     * @param $url
      * @return ApiResponse
      */
-    private function makeGETRequest($url = null): ApiResponse
+    private function makeGETRequest($url): ApiResponse
     {
         $authToken = $this->tokenService->getAuthToken();
 

@@ -60,7 +60,7 @@ class FirstAgendaService {
                 ->setName($agn->Name)
                 ->setSourceId($agn->SourceId)
                 ->setElasticSearchResults($agn->ElasticSearchResults)
-                ->setMeetingBeginFromUtc($agn->MeetingBeginFromUtc)
+                ->setMeetingBeginUtc($agn->MeetingBeginFromUtc)
                 ->setMeetingEndUtc($agn->MeetingEndUtc)
                 ->setReleasedDate($agn->ReleasedDate)
                 ->setMinutesOfMeeting($agn->MinutesOfMeeting)
@@ -87,13 +87,34 @@ class FirstAgendaService {
     }
 
     /**
-     * TODO:
-     *
      * @param $agendaUid
+     * @return Agenda
      */
-    public function getAgenda($agendaUid)
+    public function getAgenda($agendaUid): Agenda
     {
+        $response = $this->makeGETRequest('agenda/' . $agendaUid);
+        $agn = $response->getMessage();
+        $agenda = new Agenda();
+        $agenda
+            ->setAgendaUid($agn->Uid)
+            ->setCommitteeName($agn->CommitteeName)
+            ->setCommitteeUid($agn->CommitteeUid)
+            ->setName($agn->Name)
+            ->setSourceId($agn->SourceId)
+            ->setMeetingBeginUtc($agn->MeetingBeginUtc)
+            ->setMeetingEndUtc($agn->MeetingEndUtc)
+            ->setMeetingLocation($agn->MeetingLocation)
+            ->setReleasedDate($agn->ReleasedDate)
+            ->setReleasedBy($agn->ReleasedBy)
+            ->setStatus($agn->Status)
+            ->setMinutesOfMeeting($agn->IsMinuteOfMeeting)
+            ->setIsPublic($agn->IsPublic)
+            ->setDescription($agn->Description)
+            ->setNumberOfAttendees($agn->NumberOfAttendees)
+            ->setNumberOfAttendees($agn->NumberOfAbsentees)
+            ->setNumberOfCancellations($agn->NumberOfCancellations);
 
+        return $agenda;
     }
 
     /**

@@ -3,11 +3,14 @@
 use CodeBureau\FirstAgendaApi\FirstAgendaService;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class FirstAgendaServiceTest
+ */
 class FirstAgendaServiceTest extends TestCase
 {
 
     /**
-     * @covers  CodeBureau\FirstAgendaApi\FirstAgendaService
+     * @covers  CodeBureau\FirstAgendaApi\FirstAgendaService::getAgendasByCommittee
      * @test
      */
     public function getAgendasByCommittee()
@@ -18,14 +21,26 @@ class FirstAgendaServiceTest extends TestCase
     }
 
     /**
-     * @covers  CodeBureau\FirstAgendaApi\FirstAgendaService
+     * @covers CodeBureau\FirstAgendaApi\FirstAgendaService::getAgenda
      * @test
      */
-    public function getOrganizations()
+    public function getAgenda()
+    {
+        $service = new FirstAgendaService();
+        $agenda = $service->getAgenda('dd46f4f3-e78a-4db8-9f7b-7350f3d65eb6');
+        self::assertIsObject($agenda);
+    }
+
+    /**
+     * @covers  CodeBureau\FirstAgendaApi\FirstAgendaService::getCommitteesInOrganizations
+     * @test
+     */
+    public function getCommitteesInOrganizations()
     {
         $service = new FirstAgendaService();
         $organizations = $service->getCommitteesInOrganizations('29f6672e-d63c-438d-bddc-5d3fc45e8270');
         self::assertIsArray($organizations, 'Expected array with objects of type CodeBureau\FirstAgendaApi\Messages\Committee');
     }
+
 
 }

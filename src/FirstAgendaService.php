@@ -118,15 +118,31 @@ class FirstAgendaService {
     }
 
     /**
-     * TODO:
-     *
      * @param $agendaItemUid
      * @param null $includePrefixOnClosedItems
      * @param null $preserveInlineStyling
+     * @return AgendaItem
      */
-    public function getAgendaItem($agendaItemUid, $includePrefixOnClosedItems = null, $preserveInlineStyling = null )
+    public function getAgendaItem($agendaItemUid, $includePrefixOnClosedItems = null, $preserveInlineStyling = null ): AgendaItem
     {
+        $response = $this->makeGETRequest('agendaitem/' . $agendaItemUid);
+        $item = $response->getMessage();
+        $agendaItem = new AgendaItem();
+        $agendaItem
+            ->setUid($item->Uid)
+            ->setAgendaUid($item->AgendaUid)
+            ->setNumber($item->Number)
+            //->setSorting($item->Sorting)
+            //->setIsOpen($item->IsOpen)
+            ->setCaseNumber($item->CaseNumber)
+            ->setSourceId($item->SourceId)
+            ->setCaption($item->Caption);
+            //->setSection($item->Section)
+            //->setPresentations($item->Presentations)
+            //->setDocuments($item->Documents)
+            //->setItemDecision($item->ItemDecision)
 
+        return $agendaItem;
     }
 
     /**

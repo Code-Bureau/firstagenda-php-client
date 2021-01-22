@@ -6,8 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.2.3] - 2021-01-22
+
 ###
 - Added AgendaItems to the Agenda object.
+- Implemented function FirstAgendaService@getAgendaItem and corresponding test case.
 
 ## [v0.2.2] - 2021-01-19
 

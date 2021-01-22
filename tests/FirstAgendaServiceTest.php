@@ -39,8 +39,18 @@ class FirstAgendaServiceTest extends TestCase
     {
         $service = new FirstAgendaService();
         $agenda = $service->getAgenda('dd46f4f3-e78a-4db8-9f7b-7350f3d65eb6');
-        var_dump($agenda);
         self::assertIsObject($agenda);
+    }
+
+    /**
+     * @covers CodeBureau\FirstAgendaApi\FirstAgendaService::getAgendaItem
+     * @test
+     */
+    public function getAgendaItem()
+    {
+        $service = new FirstAgendaService();
+        $agendaItem = $service->getAgendaItem('4ea4be02-6e0a-470b-ba44-56d5e67eec9e');
+        self:self::assertIsObject($agendaItem);
     }
 
     /**

@@ -267,4 +267,14 @@ class Agenda
         return $this;
     }
 
+    /**
+     * @param $items
+     * @return Agenda
+     */
+    public function setItems($items): Agenda
+    {
+        $this->items = $items;
+        return $this;
+    }
+
 }

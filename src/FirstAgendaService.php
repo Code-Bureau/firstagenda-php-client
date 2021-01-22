@@ -2,9 +2,10 @@
 
 namespace CodeBureau\FirstAgendaApi;
 
-use CodeBureau\FirstAgendaApi\Messages\Agenda;
-use CodeBureau\FirstAgendaApi\Messages\ApiResponse;
 use Carbon\Carbon;
+use CodeBureau\FirstAgendaApi\Messages\Agenda;
+use CodeBureau\FirstAgendaApi\messages\AgendaItem;
+use CodeBureau\FirstAgendaApi\Messages\ApiResponse;
 use CodeBureau\FirstAgendaApi\Messages\Committee;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
@@ -17,6 +18,7 @@ use Exception;
 class FirstAgendaService {
 
     private $tokenService;
+
     private $client;
 
     /**
@@ -46,9 +48,9 @@ class FirstAgendaService {
      * @param string $agendaMeetingBeginFrom
      * @param string $agendaMeetingBeginTo
      * @param string $searchContent
-     * @return array|null
+     * @return array
      */
-    public function getAgendasByCommittee($committeeUid, $pageNumber = '', $pageSize = '', $sortDirection = '', $agendaMeetingBeginFrom = '', $agendaMeetingBeginTo = '', $searchContent = ''): ?array
+    public function getAgendasByCommittee($committeeUid, $pageNumber = '', $pageSize = '', $sortDirection = '', $agendaMeetingBeginFrom = '', $agendaMeetingBeginTo = '', $searchContent = ''): array
     {
         $response = $this->makeGETRequest('agenda/list/bycommittee/' . $committeeUid);
         return $this->mapJSONtoAgenda($response->getMessage());
@@ -79,6 +81,18 @@ class FirstAgendaService {
     {
         $response = $this->makeGETRequest('agenda/' . $agendaUid);
         $agn = $response->getMessage();
+        $items = collect($agn->Items)->map(function ($item) {
+            $a = new AgendaItem();
+            return $a->setUid($item->Uid)
+                ->setAgendaUid($item->AgendaUid)
+                ->setCommitteeId($item->CommitteeId)
+                ->setNumber($item->Number)
+                ->setOrdering($item->Ordering)
+                ->setIsPublic($item->IsPublic)
+                ->setCaseNumber($item->CaseNumber)
+                ->setSourceId($item->SourceId)
+                ->setCaption($item->Caption);
+        });
         $agenda = new Agenda();
         $agenda
             ->setAgendaUid($agn->Uid)
@@ -96,8 +110,9 @@ class FirstAgendaService {
             ->setIsPublic($agn->IsPublic)
             ->setDescription($agn->Description)
             ->setNumberOfAttendees($agn->NumberOfAttendees)
-            ->setNumberOfAttendees($agn->NumberOfAbsentees)
-            ->setNumberOfCancellations($agn->NumberOfCancellations);
+            ->setNumberOfAbsentees($agn->NumberOfAbsentees)
+            ->setNumberOfCancellations($agn->NumberOfCancellations)
+            ->setItems($items->toArray());
 
         return $agenda;
     }

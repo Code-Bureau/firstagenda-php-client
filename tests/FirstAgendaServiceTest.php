@@ -1,6 +1,7 @@
 <?php
 
 use CodeBureau\FirstAgendaApi\FirstAgendaService;
+use Dotenv\Dotenv;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -10,13 +11,26 @@ class FirstAgendaServiceTest extends TestCase
 {
 
     /**
+     * @function SetUp
+     *
+     * Load environmental variables.
+     *
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $dotenv = Dotenv::createImmutable(dirname(dirname(__FILE__)));
+        $dotenv->load();
+    }
+
+    /**
      * @covers  CodeBureau\FirstAgendaApi\FirstAgendaService::getAgendasByCommittee
      * @test
      */
     public function getAgendasByCommittee()
     {
         $service = new FirstAgendaService();
-        $agendas = $service->getAgendasByCommittee('6e1d3f46-d50b-47f5-bd1f-f12dffdba33b');
+        $agendas = $service->getAgendasByCommittee($_ENV['TestCommitteeID']);
         self::assertIsArray($agendas);
     }
 
@@ -27,7 +41,7 @@ class FirstAgendaServiceTest extends TestCase
     public function getAgendasByOrganization()
     {
         $service = new FirstAgendaService();
-        $agendas = $service->getAgendasByOrganization('29f6672e-d63c-438d-bddc-5d3fc45e8270');
+        $agendas = $service->getAgendasByOrganization($_ENV['TestOrganizationID']);
         self::assertIsArray($agendas);
     }
 
@@ -38,7 +52,7 @@ class FirstAgendaServiceTest extends TestCase
     public function getAgenda()
     {
         $service = new FirstAgendaService();
-        $agenda = $service->getAgenda('dd46f4f3-e78a-4db8-9f7b-7350f3d65eb6');
+        $agenda = $service->getAgenda($_ENV['TestAgendaID']);
         self::assertIsObject($agenda);
     }
 
@@ -49,7 +63,7 @@ class FirstAgendaServiceTest extends TestCase
     public function getAgendaItem()
     {
         $service = new FirstAgendaService();
-        $agendaItem = $service->getAgendaItem('4ea4be02-6e0a-470b-ba44-56d5e67eec9e');
+        $agendaItem = $service->getAgendaItem($_ENV['TestAgendaItemID']);
         self:self::assertIsObject($agendaItem);
     }
 
@@ -60,9 +74,7 @@ class FirstAgendaServiceTest extends TestCase
     public function getCommitteesInOrganizations()
     {
         $service = new FirstAgendaService();
-        $organizations = $service->getCommitteesInOrganizations('29f6672e-d63c-438d-bddc-5d3fc45e8270');
+        $organizations = $service->getCommitteesInOrganizations($_ENV['TestOrganizationID']);
         self::assertIsArray($organizations, 'Expected array with objects of type CodeBureau\FirstAgendaApi\Messages\Committee');
     }
-
-
 }

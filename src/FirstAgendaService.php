@@ -132,15 +132,15 @@ class FirstAgendaService {
             ->setUid($item->Uid)
             ->setAgendaUid($item->AgendaUid)
             ->setNumber($item->Number)
-            //->setSorting($item->Sorting)
-            //->setIsOpen($item->IsOpen)
+            // ->setSorting($item->Sorting)
+            // ->setIsOpen($item->IsOpen)
             ->setCaseNumber($item->CaseNumber)
             ->setSourceId($item->SourceId)
             ->setCaption($item->Caption);
-            //->setSection($item->Section)
-            //->setPresentations($item->Presentations)
-            //->setDocuments($item->Documents)
-            //->setItemDecision($item->ItemDecision)
+            // ->setSection($item->Section)
+            // ->setPresentations($item->Presentations)
+            // ->setDocuments($item->Documents)
+            // ->setItemDecision($item->ItemDecision)
 
         return $agendaItem;
     }

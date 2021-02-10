@@ -1,6 +1,7 @@
 <?php
 
 use CodeBureau\FirstAgendaApi\TokenService;
+use Dotenv\Dotenv;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -8,8 +9,32 @@ use PHPUnit\Framework\TestCase;
  */
 class TokenServiceTest extends TestCase
 {
+
     /**
-     * @covers \CodeBureau\FirstAgendaApi\TokenService
+     * @function SetUp
+     *
+     * Load environmental variables.
+     *
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $dotenv = Dotenv::createImmutable(dirname(dirname(__FILE__)));
+        $dotenv->load();
+    }
+
+    /**
+     * @covers \CodeBureau\FirstAgendaApi\TokenService::__constructor
+     * @test
+     */
+    public function initiateClassWithParams()
+    {
+        $service = new TokenService($_ENV["ClientID"], $_ENV["ClientSecret"]);
+        self::assertIsObject($service);
+    }
+
+    /**
+     * @covers \CodeBureau\FirstAgendaApi\TokenService::getNewAuthToken
      * @test
      */
     public function getAccessToken()

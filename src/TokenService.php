@@ -19,12 +19,12 @@ class TokenService
 
     /**
      * Service constructor.
+     *
+     * @param null $clientId
+     * @param null $clientSecret
      */
-    public function __construct ()
+    public function __construct ($clientId = null, $clientSecret = null)
     {
-        $dotenv = Dotenv::createImmutable(dirname(dirname(__FILE__)));
-        $dotenv->load();
-
         $this->client = new Client([
             'base_uri' => 'https://identity.firstagenda.com',
             'timeout'  => 2.0,
@@ -33,6 +33,16 @@ class TokenService
                 'Accept' => 'application/json'
             ]
         ]);
+
+
+        if (isset($clientId) && isset($clientSecret)) {
+            $_ENV["ClientID"] = $clientId;
+            $_ENV["ClientSecret"] = $clientSecret;
+
+        } else {
+            $dotenv = Dotenv::createImmutable(dirname(dirname(__FILE__)));
+            $dotenv->load();
+        }
     }
 
     /**

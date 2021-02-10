@@ -23,10 +23,12 @@ class FirstAgendaService {
 
     /**
      * FirstAgendaService constructor.
+     *
+     * @param null $clientId
+     * @param null $clientSecret
      */
-    public function __construct()
+    public function __construct($clientId = null, $clientSecret = null)
     {
-        $this->tokenService = new TokenService();
         $this->client = new Client(
             [
                 'base_uri' => 'https://prepare.firstagenda.com/api/integration/publication/',
@@ -38,6 +40,12 @@ class FirstAgendaService {
                 ]
             ]
         );
+
+        if (isset($clientId) || isset($clientSecret)) {
+            $this->tokenService = new TokenService($clientId, $clientSecret);
+        } else {
+            $this->tokenService = new TokenService();
+        }
     }
 
     /**

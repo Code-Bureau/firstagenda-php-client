@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.2.5] - 2021-02-09
+
+### Added
+- Updated the method signature for both FirstAgendaService and TokenService, such that 
+the ClientID and ClientSecret can be passed to the classes.
+
 ## [v0.2.4] - 2021-02-09
 
 ### Changed

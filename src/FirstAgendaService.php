@@ -93,10 +93,8 @@ class FirstAgendaService {
             $a = new ApiAgendaItem($item->Uid);
             return $a
                 ->setAgendaUid($item->AgendaUid)
-                ->setCommitteeId($item->CommitteeId)
                 ->setNumber($item->Number)
-                ->setOrdering($item->Ordering)
-                ->setIsPublic($item->IsPublic)
+                ->setIsOpen($item->IsPublic)
                 ->setCaseNumber($item->CaseNumber)
                 ->setSourceId($item->SourceId)
                 ->setCaption($item->Caption);
@@ -135,7 +133,6 @@ class FirstAgendaService {
     {
         $response = $this->makeGETRequest('agendaitem/' . $agendaItemUid);
         $item = $response->getMessage();
-        var_dump($item);
         $agendaItem = new ApiAgendaItem($item->Uid);
         $agendaItem
             ->setAgendaUid($item->AgendaUid)

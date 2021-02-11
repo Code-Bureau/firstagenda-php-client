@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.2.8]
+
+### Changed
+- Fixed error in FirstAgendaService
+
 ## [v0.2.7]
 
 ### Added

@@ -2,122 +2,245 @@
 
 namespace CodeBureau\FirstAgendaApi\Messages;
 
+use Tightenco\Collect\Support\Collection;
+
+/**
+ * Class ApiAgendaItem
+ *
+ * This class is a one-to-one mapping of the API response JSON.
+ *
+ * @package CodeBureau\FirstAgendaApi\Messages
+ */
 class ApiAgendaItem
 {
     private $uid;
     private $agendaUid;
-    private $committeeId;
     private $number;
-    private $ordering;
-    private $isPublic;
+    private $sorting;
+    private $isOpen;
     private $caseNumber;
     private $sourceId;
     private $caption;
+    private $section;
+    private $presentations;
+    private $documents;
+    private $itemDecision;
 
     /**
      * AgendaItem constructor.
+     * @param $uid
      */
-    public function __construct()
+    public function __construct($uid)
     {
-        $this->uid = null;
+        $this->uid = $uid;
         $this->agendaUid = null;
-        $this->committeeId = null;
         $this->number = null;
-        $this->ordering = null;
-        $this->isPublic = null;
+        $this->sorting = null;
+        $this->isOpen = null;
         $this->caseNumber = null;
         $this->sourceId = null;
         $this->caption = null;
+        $this->section = null;
+        $this->presentations = collect([]);
+        $this->documents = collect([]);
+        $this->itemDecision = collect([]);
     }
 
     /**
-     * @param mixed $uid
-     * @return ApiAgendaItem
+     * @return null
      */
-    public function setUid($uid): ApiAgendaItem
+    public function getUid()
     {
-        $this->uid = $uid;
-        return $this;
+        return $this->uid;
+    }
+
+    /**
+     * @return null
+     */
+    public function getAgendaUid()
+    {
+        return $this->agendaUid;
     }
 
     /**
      * @param mixed $agendaUid
      * @return ApiAgendaItem
      */
-    public function setAgendaUid($agendaUid): ApiAgendaItem
+    public function setAgendaUid($agendaUid)
     {
         $this->agendaUid = $agendaUid;
         return $this;
     }
 
     /**
-     * @param mixed $committeeId
-     * @return ApiAgendaItem
+     * @return null
      */
-    public function setCommitteeId($committeeId): ApiAgendaItem
+    public function getNumber()
     {
-        $this->committeeId = $committeeId;
-        return $this;
+        return $this->number;
     }
 
     /**
      * @param mixed $number
      * @return ApiAgendaItem
      */
-    public function setNumber($number): ApiAgendaItem
+    public function setNumber($number)
     {
         $this->number = $number;
         return $this;
     }
 
     /**
-     * @param mixed $ordering
+     * @return null
+     */
+    public function getSorting()
+    {
+        return $this->sorting;
+    }
+
+    /**
+     * @param null $sorting
      * @return ApiAgendaItem
      */
-    public function setOrdering($ordering): ApiAgendaItem
+    public function setSorting($sorting)
     {
-        $this->ordering = $ordering;
+        $this->sorting = $sorting;
         return $this;
     }
 
     /**
-     * @param mixed $isPublic
+     * @return null
+     */
+    public function getIsOpen()
+    {
+        return $this->isOpen;
+    }
+
+    /**
+     * @param null $isOpen
      * @return ApiAgendaItem
      */
-    public function setIsPublic($isPublic): ApiAgendaItem
+    public function setIsOpen($isOpen)
     {
-        $this->isPublic = $isPublic;
+        $this->isOpen = $isOpen;
         return $this;
+    }
+
+    /**
+     * @return null
+     */
+    public function getCaseNumber()
+    {
+        return $this->caseNumber;
     }
 
     /**
      * @param mixed $caseNumber
      * @return ApiAgendaItem
      */
-    public function setCaseNumber($caseNumber): ApiAgendaItem
+    public function setCaseNumber($caseNumber)
     {
         $this->caseNumber = $caseNumber;
         return $this;
     }
 
     /**
+     * @return null
+     */
+    public function getSourceId()
+    {
+        return $this->sourceId;
+    }
+
+    /**
      * @param mixed $sourceId
      * @return ApiAgendaItem
      */
-    public function setSourceId($sourceId): ApiAgendaItem
+    public function setSourceId($sourceId)
     {
         $this->sourceId = $sourceId;
         return $this;
     }
 
     /**
+     * @return null
+     */
+    public function getCaption()
+    {
+        return $this->caption;
+    }
+
+    /**
      * @param mixed $caption
      * @return ApiAgendaItem
      */
-    public function setCaption($caption): ApiAgendaItem
+    public function setCaption($caption)
     {
         $this->caption = $caption;
         return $this;
     }
 
+    /**
+     * @return null
+     */
+    public function getSection()
+    {
+        return $this->section;
+    }
+
+    /**
+     * @param null $section
+     */
+    public function setSection($section): void
+    {
+        $this->section = $section;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getPresentations()
+    {
+        return $this->presentations;
+    }
+
+    /**
+     * @param $presentation
+     */
+    public function addPresentation($presentation)
+    {
+        $this->presentations->add($presentation);
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getDocuments()
+    {
+        return $this->documents;
+    }
+
+    /**
+     * @param $document
+     */
+    public function addDocuments($document)
+    {
+        $this->documents->add($document);
+    }
+
+    /**
+     * @param $decisionItem
+     */
+    public function addDecisionItem($decisionItem)
+    {
+        $this->itemDecision->add($decisionItem);
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getDecisionItems()
+    {
+        return $this->itemDecision;
+    }
 }

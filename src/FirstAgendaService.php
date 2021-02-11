@@ -90,8 +90,8 @@ class FirstAgendaService {
         $response = $this->makeGETRequest('agenda/' . $agendaUid);
         $agn = $response->getMessage();
         $items = collect($agn->Items)->map(function ($item) {
-            $a = new ApiAgendaItem();
-            return $a->setUid($item->Uid)
+            $a = new ApiAgendaItem($item->Uid);
+            return $a
                 ->setAgendaUid($item->AgendaUid)
                 ->setCommitteeId($item->CommitteeId)
                 ->setNumber($item->Number)
@@ -135,12 +135,12 @@ class FirstAgendaService {
     {
         $response = $this->makeGETRequest('agendaitem/' . $agendaItemUid);
         $item = $response->getMessage();
-        $agendaItem = new ApiAgendaItem();
+        var_dump($item);
+        $agendaItem = new ApiAgendaItem($item->Uid);
         $agendaItem
-            ->setUid($item->Uid)
             ->setAgendaUid($item->AgendaUid)
             ->setNumber($item->Number)
-            // ->setSorting($item->Sorting)
+            ->setSorting($item->Sorting)
             // ->setIsOpen($item->IsOpen)
             ->setCaseNumber($item->CaseNumber)
             ->setSourceId($item->SourceId)

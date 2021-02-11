@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.2.7]
+
+### Added
+- Added Getter methods to the ApiAgendaItem
+
+### Removed
+- Removed unused properties from ApiAgendaItem
+
+## [v0.2.6]
+
 ### Changed
 - Changed Agenda, AgendaItem, Committee to ApiAgenda, ApiItem, ApiCommittee.
 - Renamed directory messages to Messages.

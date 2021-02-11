@@ -1,8 +1,8 @@
 <?php
 
-namespace CodeBureau\FirstAgendaApi\messages;
+namespace CodeBureau\FirstAgendaApi\Messages;
 
-class AgendaItem
+class ApiAgendaItem
 {
     private $uid;
     private $agendaUid;
@@ -32,9 +32,9 @@ class AgendaItem
 
     /**
      * @param mixed $uid
-     * @return AgendaItem
+     * @return ApiAgendaItem
      */
-    public function setUid($uid): AgendaItem
+    public function setUid($uid): ApiAgendaItem
     {
         $this->uid = $uid;
         return $this;
@@ -42,9 +42,9 @@ class AgendaItem
 
     /**
      * @param mixed $agendaUid
-     * @return AgendaItem
+     * @return ApiAgendaItem
      */
-    public function setAgendaUid($agendaUid): AgendaItem
+    public function setAgendaUid($agendaUid): ApiAgendaItem
     {
         $this->agendaUid = $agendaUid;
         return $this;
@@ -52,9 +52,9 @@ class AgendaItem
 
     /**
      * @param mixed $committeeId
-     * @return AgendaItem
+     * @return ApiAgendaItem
      */
-    public function setCommitteeId($committeeId): AgendaItem
+    public function setCommitteeId($committeeId): ApiAgendaItem
     {
         $this->committeeId = $committeeId;
         return $this;
@@ -62,9 +62,9 @@ class AgendaItem
 
     /**
      * @param mixed $number
-     * @return AgendaItem
+     * @return ApiAgendaItem
      */
-    public function setNumber($number): AgendaItem
+    public function setNumber($number): ApiAgendaItem
     {
         $this->number = $number;
         return $this;
@@ -72,9 +72,9 @@ class AgendaItem
 
     /**
      * @param mixed $ordering
-     * @return AgendaItem
+     * @return ApiAgendaItem
      */
-    public function setOrdering($ordering): AgendaItem
+    public function setOrdering($ordering): ApiAgendaItem
     {
         $this->ordering = $ordering;
         return $this;
@@ -82,9 +82,9 @@ class AgendaItem
 
     /**
      * @param mixed $isPublic
-     * @return AgendaItem
+     * @return ApiAgendaItem
      */
-    public function setIsPublic($isPublic): AgendaItem
+    public function setIsPublic($isPublic): ApiAgendaItem
     {
         $this->isPublic = $isPublic;
         return $this;
@@ -92,9 +92,9 @@ class AgendaItem
 
     /**
      * @param mixed $caseNumber
-     * @return AgendaItem
+     * @return ApiAgendaItem
      */
-    public function setCaseNumber($caseNumber): AgendaItem
+    public function setCaseNumber($caseNumber): ApiAgendaItem
     {
         $this->caseNumber = $caseNumber;
         return $this;
@@ -102,9 +102,9 @@ class AgendaItem
 
     /**
      * @param mixed $sourceId
-     * @return AgendaItem
+     * @return ApiAgendaItem
      */
-    public function setSourceId($sourceId): AgendaItem
+    public function setSourceId($sourceId): ApiAgendaItem
     {
         $this->sourceId = $sourceId;
         return $this;
@@ -112,9 +112,9 @@ class AgendaItem
 
     /**
      * @param mixed $caption
-     * @return AgendaItem
+     * @return ApiAgendaItem
      */
-    public function setCaption($caption): AgendaItem
+    public function setCaption($caption): ApiAgendaItem
     {
         $this->caption = $caption;
         return $this;

@@ -3,10 +3,10 @@
 namespace CodeBureau\FirstAgendaApi;
 
 use Carbon\Carbon;
-use CodeBureau\FirstAgendaApi\Messages\Agenda;
-use CodeBureau\FirstAgendaApi\messages\AgendaItem;
+use CodeBureau\FirstAgendaApi\Messages\ApiAgenda;
+use CodeBureau\FirstAgendaApi\messages\ApiAgendaItem;
 use CodeBureau\FirstAgendaApi\Messages\ApiResponse;
-use CodeBureau\FirstAgendaApi\Messages\Committee;
+use CodeBureau\FirstAgendaApi\Messages\ApiCommittee;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Exception;
@@ -83,14 +83,14 @@ class FirstAgendaService {
 
     /**
      * @param $agendaUid
-     * @return Agenda
+     * @return ApiAgenda
      */
-    public function getAgenda($agendaUid): Agenda
+    public function getAgenda($agendaUid): ApiAgenda
     {
         $response = $this->makeGETRequest('agenda/' . $agendaUid);
         $agn = $response->getMessage();
         $items = collect($agn->Items)->map(function ($item) {
-            $a = new AgendaItem();
+            $a = new ApiAgendaItem();
             return $a->setUid($item->Uid)
                 ->setAgendaUid($item->AgendaUid)
                 ->setCommitteeId($item->CommitteeId)
@@ -101,7 +101,7 @@ class FirstAgendaService {
                 ->setSourceId($item->SourceId)
                 ->setCaption($item->Caption);
         });
-        $agenda = new Agenda();
+        $agenda = new ApiAgenda();
         $agenda
             ->setAgendaUid($agn->Uid)
             ->setCommitteeName($agn->CommitteeName)
@@ -129,13 +129,13 @@ class FirstAgendaService {
      * @param $agendaItemUid
      * @param null $includePrefixOnClosedItems
      * @param null $preserveInlineStyling
-     * @return AgendaItem
+     * @return ApiAgendaItem
      */
-    public function getAgendaItem($agendaItemUid, $includePrefixOnClosedItems = null, $preserveInlineStyling = null ): AgendaItem
+    public function getAgendaItem($agendaItemUid, $includePrefixOnClosedItems = null, $preserveInlineStyling = null ): ApiAgendaItem
     {
         $response = $this->makeGETRequest('agendaitem/' . $agendaItemUid);
         $item = $response->getMessage();
-        $agendaItem = new AgendaItem();
+        $agendaItem = new ApiAgendaItem();
         $agendaItem
             ->setUid($item->Uid)
             ->setAgendaUid($item->AgendaUid)
@@ -169,7 +169,7 @@ class FirstAgendaService {
         $response = $this->makeGETRequest('committee/list/byorganisation/' . $uuid);
         $organizations = $response->getMessage();
         foreach($organizations as $key => $org){
-            $committee = new Committee();
+            $committee = new ApiCommittee();
             $committee
                 ->setName($org->Name)
                 ->setSourceId($org->SourceId)
@@ -244,7 +244,7 @@ class FirstAgendaService {
     private function mapJSONtoAgenda(array $agendas): array
     {
         foreach($agendas as $key => $agn) {
-            $agenda = new Agenda();
+            $agenda = new ApiAgenda();
             $agenda
                 ->setAgendaUid($agn->AgendaUid)
                 ->setOrganisationUid($agn->OrganisationUid)

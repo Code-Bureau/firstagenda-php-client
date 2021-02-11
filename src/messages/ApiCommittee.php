@@ -2,7 +2,7 @@
 
 namespace CodeBureau\FirstAgendaApi\Messages;
 
-class Committee
+class ApiCommittee
 {
     private $name;
     private $sourceId;
@@ -20,7 +20,7 @@ class Committee
 
     /**
      * @param mixed $name
-     * @return Committee
+     * @return ApiCommittee
      */
     public function setName($name)
     {
@@ -30,7 +30,7 @@ class Committee
 
     /**
      * @param mixed $sourceId
-     * @return Committee
+     * @return ApiCommittee
      */
     public function setSourceId($sourceId)
     {
@@ -40,7 +40,7 @@ class Committee
 
     /**
      * @param bool $isPublic
-     * @return Committee
+     * @return ApiCommittee
      */
     public function setIsPublic(bool $isPublic)
     {
@@ -50,7 +50,7 @@ class Committee
 
     /**
      * @param bool $isHistorical
-     * @return Committee
+     * @return ApiCommittee
      */
     public function setIsHistorical(bool $isHistorical)
     {
@@ -60,7 +60,7 @@ class Committee
 
     /**
      * @param bool $showPublicCaptionForClosedItems
-     * @return Committee
+     * @return ApiCommittee
      */
     public function setShowPublicCaptionForClosedItems(bool $showPublicCaptionForClosedItems)
     {
@@ -70,7 +70,7 @@ class Committee
 
     /**
      * @param bool $showPublicDecisionForClosedItems
-     * @return Committee
+     * @return ApiCommittee
      */
     public function setShowPublicDecisionForClosedItems(bool $showPublicDecisionForClosedItems)
     {
@@ -80,7 +80,7 @@ class Committee
 
     /**
      * @param mixed $committeeUid
-     * @return Committee
+     * @return ApiCommittee
      */
     public function setCommitteeUid($committeeUid)
     {
@@ -90,7 +90,7 @@ class Committee
 
     /**
      * @param mixed $organisationUid
-     * @return Committee
+     * @return ApiCommittee
      */
     public function setOrganisationUid($organisationUid)
     {

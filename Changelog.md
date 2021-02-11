@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Changed Agenda, AgendaItem, Committee to ApiAgenda, ApiItem, ApiCommittee.
+- Renamed directory messages to Messages.
+
 ## [v0.2.5] - 2021-02-09
 
 ### Added

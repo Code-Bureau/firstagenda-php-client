@@ -77,4 +77,15 @@ class FirstAgendaServiceTest extends TestCase
         $organizations = $service->getCommitteesInOrganizations($_ENV['TestOrganizationID']);
         self::assertIsArray($organizations, 'Expected array with objects of type CodeBureau\FirstAgendaApi\Messages\Committee');
     }
+
+    /**
+     * @covers \CodeBureau\FirstAgendaApi\FirstAgendaService::getAllCommitteesAvailable
+     * @test
+     */
+    public function getCommittees()
+    {
+        $service = new FirstAgendaService();
+        $committees = $service->getAllCommitteesAvailable();
+        self::assertIsArray($committees, 'Expected array with objects of type CodeBureau\FirstAgendaApi\Messages\Committee');
+    }
 }

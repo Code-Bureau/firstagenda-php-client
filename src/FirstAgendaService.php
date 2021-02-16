@@ -155,13 +155,9 @@ class FirstAgendaService {
      * @param string $corporationUuid
      * @param Carbon|null $publicationDate
      * @return array
-     * @throws Exception
      */
-    public function getCommitteesInOrganizations($uuid = null, $corporationUuid = '', Carbon $publicationDate = null): array
+    public function getCommitteesInOrganizations(string $uuid, $corporationUuid = '', Carbon $publicationDate = null): array
     {
-        if (empty($uuid)) {
-            throw new Exception('Missing parameters UUID');
-        }
 
         $response = $this->makeGETRequest('committee/list/byorganisation/' . $uuid);
         $organizations = $response->getMessage();
@@ -183,15 +179,31 @@ class FirstAgendaService {
     }
 
     /**
-     * TODO:
-     *
      * @param int $pageNumber
      * @param int $pageSize
      * @param null $sortDirection
+     * @return array
      */
-    public function getAllCommitteesAvailable($pageNumber = 0, $pageSize = 15, $sortDirection = null)
+    public function getAllCommitteesAvailable($pageNumber = 0, $pageSize = 15, $sortDirection = null): array
     {
+        $response = $this->makeGETRequest('committee/list/');
+        $rawCommittees = $response->getMessage();
+        $committees = [];
+        foreach ($rawCommittees as $key => $rawCommittee) {
+            $committee = new ApiCommittee();
+            $committee
+                ->setName($rawCommittee->Name)
+                ->setSourceId($rawCommittee->SourceId)
+                ->setIsPublic($rawCommittee->IsPublic)
+                ->setIsHistorical($rawCommittee->IsHistorical)
+                ->setShowPublicCaptionForClosedItems($rawCommittee->ShowPublicCaptionForClosedItems)
+                ->setShowPublicDecisionForClosedItems($rawCommittee->ShowPublicDecisionForClosedItems)
+                ->setCommitteeUid($rawCommittee->CommitteeUid)
+                ->setOrganisationUid($rawCommittee->OrganisationUid);
+            $committees[$key] = $committee;
+        }
 
+        return $committees;
     }
 
     /**

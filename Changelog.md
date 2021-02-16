@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.2.10]
+
+### Added
+- Added Getters to the class ApiCommittee
+
+## [v0.2.9]
+
+### Added
+- Implemented the getAllCommitteesAvailable function
+
 ## [v0.2.8]
 
 ### Changed

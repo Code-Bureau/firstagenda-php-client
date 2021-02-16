@@ -13,9 +13,27 @@ class ApiCommittee
     private $committeeUid;
     private $organisationUid;
 
+    /**
+     * ApiCommittee constructor.
+     */
     public function __construct()
     {
+        $this->name = null;
+        $this->sourceId = null;
+        $this->isPublic = false;
+        $this->isHistorical = false;
+        $this->showPublicCaptionForClosedItems = false;
+        $this->showPublicDecisionForClosedItems = false;
+        $this->committeeUid = null;
+        $this->organisationUid = null;
+    }
 
+    /**
+     * @return null
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 
     /**
@@ -29,6 +47,14 @@ class ApiCommittee
     }
 
     /**
+     * @return null
+     */
+    public function getSourceId()
+    {
+        return $this->sourceId;
+    }
+
+    /**
      * @param mixed $sourceId
      * @return ApiCommittee
      */
@@ -36,6 +62,14 @@ class ApiCommittee
     {
         $this->sourceId = $sourceId;
         return $this;
+    }
+
+    /**
+     * @return false
+     */
+    public function getIsPublic(): bool
+    {
+        return $this->isPublic;
     }
 
     /**
@@ -49,6 +83,14 @@ class ApiCommittee
     }
 
     /**
+     * @return false
+     */
+    public function getIsHistorical(): bool
+    {
+        return $this->isHistorical;
+    }
+
+    /**
      * @param bool $isHistorical
      * @return ApiCommittee
      */
@@ -56,6 +98,14 @@ class ApiCommittee
     {
         $this->isHistorical = $isHistorical;
         return $this;
+    }
+
+    /**
+     * @return false
+     */
+    public function getShowPublicCaptionForClosedItems(): bool
+    {
+        return $this->showPublicCaptionForClosedItems;
     }
 
     /**
@@ -69,6 +119,14 @@ class ApiCommittee
     }
 
     /**
+     * @return false
+     */
+    public function getShowPublicDecisionForClosedItems(): bool
+    {
+        return $this->showPublicDecisionForClosedItems;
+    }
+
+    /**
      * @param bool $showPublicDecisionForClosedItems
      * @return ApiCommittee
      */
@@ -79,6 +137,14 @@ class ApiCommittee
     }
 
     /**
+     * @return null
+     */
+    public function getCommitteeUid()
+    {
+        return $this->committeeUid;
+    }
+
+    /**
      * @param mixed $committeeUid
      * @return ApiCommittee
      */
@@ -86,6 +152,14 @@ class ApiCommittee
     {
         $this->committeeUid = $committeeUid;
         return $this;
+    }
+
+    /**
+     * @return null
+     */
+    public function getOrganisationUid()
+    {
+        return $this->organisationUid;
     }
 
     /**

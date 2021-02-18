@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.3.0]
+
+### Added
+- Added parameters handling to getAgendasByCommittee
+- Added parameters handling to getAgendasByOrganization
+
 ## [v0.2.10]
 
 ### Added

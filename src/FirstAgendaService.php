@@ -2,6 +2,7 @@
 
 namespace CodeBureau\FirstAgendaApi;
 
+use \DateTime;
 use Carbon\Carbon;
 use CodeBureau\FirstAgendaApi\Messages\ApiAgenda;
 use CodeBureau\FirstAgendaApi\messages\ApiAgendaItem;
@@ -9,7 +10,6 @@ use CodeBureau\FirstAgendaApi\Messages\ApiResponse;
 use CodeBureau\FirstAgendaApi\Messages\ApiCommittee;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use Exception;
 
 /**
  * Class FirstAgendaService
@@ -58,9 +58,16 @@ class FirstAgendaService {
      * @param string $searchContent
      * @return array
      */
-    public function getAgendasByCommittee($committeeUid, $pageNumber = '', $pageSize = '', $sortDirection = '', $agendaMeetingBeginFrom = '', $agendaMeetingBeginTo = '', $searchContent = ''): array
+    public function getAgendasByCommittee($committeeUid, $pageNumber = null, $pageSize = null, $sortDirection = null, $agendaMeetingBeginFrom = null, $agendaMeetingBeginTo = null, $searchContent = null) : array
     {
-        $response = $this->makeGETRequest('agenda/list/bycommittee/' . $committeeUid);
+        if ( !function_exists('http_build_query') ) {
+            $response = $this->makeGETRequest('agenda/list/bycommittee/' . $committeeUid);
+            return $this->mapJSONtoAgenda($response->getMessage());
+        }
+
+        $params = $this->generateParams($pageNumber, $pageSize, $sortDirection, $agendaMeetingBeginFrom, $agendaMeetingBeginTo, $searchContent);
+
+        $response = $this->makeGETRequest('agenda/list/bycommittee/' . $committeeUid . $params);
         return $this->mapJSONtoAgenda($response->getMessage());
     }
 
@@ -77,7 +84,14 @@ class FirstAgendaService {
      */
     public function getAgendasByOrganization($organizationUid, $pageNumber = 0, $pageSize = 15, $sortDirection = 0, $agendaMeetingBeginFrom = null, $agendaMeetingBeginTo = null, $searchContent = null): array
     {
-        $response = $this->makeGETRequest('agenda/list/byorganisation/' . $organizationUid);
+        if ( !function_exists('http_build_query') ) {
+            $response = $this->makeGETRequest('agenda/list/byorganisation/' . $organizationUid);
+            return $this->mapJSONtoAgenda($response->getMessage());
+        }
+
+        $params = $this->generateParams($pageNumber, $pageSize, $sortDirection, $agendaMeetingBeginFrom, $agendaMeetingBeginTo, $searchContent);
+
+        $response = $this->makeGETRequest('agenda/list/byorganisation/' . $organizationUid . $params);
         return $this->mapJSONtoAgenda($response->getMessage());
     }
 
@@ -274,6 +288,46 @@ class FirstAgendaService {
             $agendas[$key] = $agenda;
         }
         return $agendas;
+    }
+
+    /**
+     * @param $pageNumber
+     * @param $pageSize
+     * @param $sortDirection
+     * @param $agendaMeetingBeginFrom
+     * @param $agendaMeetingBeginTo
+     * @param $searchContent
+     * @return string
+     */
+    private function generateParams($pageNumber, $pageSize, $sortDirection, $agendaMeetingBeginFrom, $agendaMeetingBeginTo, $searchContent): string
+    {
+        // Build Params
+        $paramsData = [];
+        if (isset($pageNumber) && is_numeric($pageNumber)) {
+            $paramsData['pageNumber'] = $pageNumber;
+        }
+
+        if (isset($pageSize) && !empty($pageSize)) {
+            $paramsData['pageSize'] = $pageSize;
+        }
+
+        if (isset($sortDirection) && is_numeric($sortDirection)) {
+            $paramsData['sortDirection'] = $sortDirection;
+        }
+
+        if (isset($agendaMeetingBeginFrom) && $agendaMeetingBeginFrom instanceof DateTime) {
+            $paramsData['agendaMeetingBeginFrom'] = $agendaMeetingBeginFrom;
+        }
+
+        if (isset($agendaMeetingBeginTo) && $agendaMeetingBeginTo instanceof DateTime) {
+            $paramsData['agendaMeetingBeginTo'] = $agendaMeetingBeginTo;
+        }
+
+        if (isset($searchContent) && is_string($searchContent)) {
+            $paramsData['searchContent'] = $searchContent;
+        }
+
+        return '?' . http_build_query($paramsData);
     }
 
     /**

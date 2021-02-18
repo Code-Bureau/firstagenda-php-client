@@ -35,6 +35,17 @@ class FirstAgendaServiceTest extends TestCase
     }
 
     /**
+     * @covers \CodeBureau\FirstAgendaApi\FirstAgendaService::getAgendasByCommittee
+     * @test
+     */
+    public function getAgendasByCommitteeWithParams()
+    {
+        $service = new FirstAgendaService();
+        $agendas = $service->getAgendasByCommittee($_ENV['TestCommitteeID'],0,null,1,);
+        self::assertIsArray($agendas);
+    }
+
+    /**
      * @covers CodeBureau\FirstAgendaApi\FirstAgendaService::getAgendasByOrganization
      * @test
      */

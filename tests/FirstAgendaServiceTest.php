@@ -75,6 +75,7 @@ class FirstAgendaServiceTest extends TestCase
     {
         $service = new FirstAgendaService();
         $agendaItem = $service->getAgendaItem($_ENV['TestAgendaItemID']);
+        print_r($agendaItem);
         self:self::assertIsObject($agendaItem);
     }
 

@@ -10,6 +10,8 @@ use PHPUnit\Framework\TestCase;
 class FirstAgendaServiceTest extends TestCase
 {
 
+    private $service;
+
     /**
      * @function SetUp
      *
@@ -21,6 +23,8 @@ class FirstAgendaServiceTest extends TestCase
         parent::setUp();
         $dotenv = Dotenv::createImmutable(dirname(dirname(__FILE__)));
         $dotenv->load();
+
+        $this->service = new FirstAgendaService();
     }
 
     /**
@@ -29,8 +33,7 @@ class FirstAgendaServiceTest extends TestCase
      */
     public function getAgendasByCommittee()
     {
-        $service = new FirstAgendaService();
-        $agendas = $service->getAgendasByCommittee($_ENV['TestCommitteeID']);
+        $agendas = $this->service->getAgendasByCommittee($_ENV['TestCommitteeID']);
         self::assertIsArray($agendas);
     }
 
@@ -40,8 +43,7 @@ class FirstAgendaServiceTest extends TestCase
      */
     public function getAgendasByCommitteeWithParams()
     {
-        $service = new FirstAgendaService();
-        $agendas = $service->getAgendasByCommittee($_ENV['TestCommitteeID'],0,null,1,);
+        $agendas = $this->service->getAgendasByCommittee($_ENV['TestCommitteeID'],0,null,1,);
         self::assertIsArray($agendas);
     }
 
@@ -51,8 +53,7 @@ class FirstAgendaServiceTest extends TestCase
      */
     public function getAgendasByOrganization()
     {
-        $service = new FirstAgendaService();
-        $agendas = $service->getAgendasByOrganization($_ENV['TestOrganizationID']);
+        $agendas = $this->service->getAgendasByOrganization($_ENV['TestOrganizationID']);
         self::assertIsArray($agendas);
     }
 
@@ -62,8 +63,7 @@ class FirstAgendaServiceTest extends TestCase
      */
     public function getAgenda()
     {
-        $service = new FirstAgendaService();
-        $agenda = $service->getAgenda($_ENV['TestAgendaID']);
+        $agenda = $this->service->getAgenda($_ENV['TestAgendaID']);
         self::assertIsObject($agenda);
     }
 
@@ -73,9 +73,7 @@ class FirstAgendaServiceTest extends TestCase
      */
     public function getAgendaItem()
     {
-        $service = new FirstAgendaService();
-        $agendaItem = $service->getAgendaItem($_ENV['TestAgendaItemID']);
-        print_r($agendaItem);
+        $agendaItem = $this->service->getAgendaItem($_ENV['TestAgendaItemID']);
         self:self::assertIsObject($agendaItem);
     }
 
@@ -85,8 +83,7 @@ class FirstAgendaServiceTest extends TestCase
      */
     public function getCommitteesInOrganizations()
     {
-        $service = new FirstAgendaService();
-        $organizations = $service->getCommitteesInOrganizations($_ENV['TestOrganizationID']);
+        $organizations = $this->service->getCommitteesInOrganizations($_ENV['TestOrganizationID']);
         self::assertIsArray($organizations, 'Expected array with objects of type CodeBureau\FirstAgendaApi\Messages\Committee');
     }
 
@@ -96,8 +93,18 @@ class FirstAgendaServiceTest extends TestCase
      */
     public function getCommittees()
     {
-        $service = new FirstAgendaService();
-        $committees = $service->getAllCommitteesAvailable();
+        $committees = $this->service->getAllCommitteesAvailable();
         self::assertIsArray($committees, 'Expected array with objects of type CodeBureau\FirstAgendaApi\Messages\Committee');
+    }
+
+
+    /**
+     * @covers \CodeBureau\FirstAgendaApi\FirstAgendaService::getPDFDocumentUrl
+     * @test
+     */
+    public function getPDFDocumentURL()
+    {
+        $urlObject = $this->service->getPDFDocumentUrl($_ENV['TestDocumentID']);
+        self:self::assertIsObject($urlObject);
     }
 }

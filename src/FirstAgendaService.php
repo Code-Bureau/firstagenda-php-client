@@ -2,6 +2,7 @@
 
 namespace CodeBureau\FirstAgendaApi;
 
+use CodeBureau\FirstAgendaApi\Messages\ApiDownloadLink;
 use \DateTime;
 use Carbon\Carbon;
 use CodeBureau\FirstAgendaApi\Messages\ApiAgenda;
@@ -239,13 +240,27 @@ class FirstAgendaService {
     }
 
     /**
-     * TODO:
+     * @function getPDFDocumentUrl
+     *
+     * Returns a temporary download URL for a PDF representation of the document identified by documentUid
      *
      * @param $documentUid
+     * @return ApiDownloadLink
      */
-    public function getPDFUrl($documentUid)
+    public function getPDFDocumentUrl($documentUid): ApiDownloadLink
     {
+        $response = $this->makeGETRequest('/api/integration/publication/document/' . $documentUid . '/url');
+        $message = $response->getMessage();
 
+        $download = new ApiDownloadLink();
+        $download
+            ->setUrl($message->DownloadUrl)
+            ->setExpiration(Carbon::parse($message->Expiration))
+            ->setErrorCode($message->ErrorCode)
+            ->setErrorMessage($message->ErrorMessage)
+            ->setHasError($message->HasError);
+
+        return $download;
     }
 
     /**

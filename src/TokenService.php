@@ -38,7 +38,6 @@ class TokenService
         if (isset($clientId) && isset($clientSecret)) {
             $_ENV["ClientID"] = $clientId;
             $_ENV["ClientSecret"] = $clientSecret;
-
         } else {
             $dotenv = Dotenv::createImmutable(dirname(dirname(__FILE__)));
             $dotenv->load();

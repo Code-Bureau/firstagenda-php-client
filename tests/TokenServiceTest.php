@@ -19,8 +19,11 @@ class TokenServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $dotenv = Dotenv::createImmutable(dirname(dirname(__FILE__)));
-        $dotenv->load();
+
+        if (file_exists(dirname(dirname(__FILE__)) . '/.env')) {
+            $dotenv = Dotenv::createImmutable(dirname(dirname(__FILE__)));
+            $dotenv->load();
+        }
     }
 
     /**

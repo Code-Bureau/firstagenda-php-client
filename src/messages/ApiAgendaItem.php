@@ -240,9 +240,9 @@ class ApiAgendaItem
     }
 
     /**
-     * @return Decision
+     * @return Decision || null
      */
-    public function getDecisionItem(): Decision
+    public function getDecisionItem(): ?Decision
     {
         return $this->itemDecision;
     }

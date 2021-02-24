@@ -43,7 +43,7 @@ class ApiAgendaItem
         $this->section = null;
         $this->presentations = collect([]);
         $this->documents = collect([]);
-        $this->itemDecision = collect([]);
+        $this->itemDecision = null;
     }
 
     /**
@@ -231,16 +231,18 @@ class ApiAgendaItem
 
     /**
      * @param $decisionItem
+     * @return ApiAgendaItem
      */
-    public function addDecisionItem(Decision $decisionItem)
+    public function setDecisionItem(Decision $decisionItem): ApiAgendaItem
     {
-        $this->itemDecision->add($decisionItem);
+        $this->itemDecision = ($decisionItem);
+        return $this;
     }
 
     /**
-     * @return Collection
+     * @return Decision
      */
-    public function getDecisionItems(): Collection
+    public function getDecisionItem(): Decision
     {
         return $this->itemDecision;
     }

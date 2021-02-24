@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.3.4]
+
+### Changed
+- Changed DecisionItem in ApiAgendaItem from Collection to Decision
+
 ## [v0.3.3]
 
 ### Added

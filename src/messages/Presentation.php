@@ -1,9 +1,11 @@
 <?php
 
-
 namespace CodeBureau\FirstAgendaApi\Messages;
 
-
+/**
+ * Class Presentation
+ * @package CodeBureau\FirstAgendaApi\Messages
+ */
 class Presentation
 {
     private $type;

@@ -176,20 +176,7 @@ class FirstAgendaService {
 
         $response = $this->makeGETRequest('committee/list/byorganisation/' . $uuid);
         $organizations = $response->getMessage();
-        foreach($organizations as $key => $org){
-            $committee = new ApiCommittee();
-            $committee
-                ->setName($org->Name)
-                ->setSourceId($org->SourceId)
-                ->setIsPublic($org->IsPublic)
-                ->setIsHistorical($org->IsHistorical)
-                ->setShowPublicCaptionForClosedItems($org->ShowPublicCaptionForClosedItems)
-                ->setShowPublicDecisionForClosedItems($org->ShowPublicDecisionForClosedItems)
-                ->setCommitteeUid($org->CommitteeUid)
-                ->setOrganisationUid($org->OrganisationUid);
-            $organizations[$key] = $committee;
-        }
-        return $organizations;
+        return $this->mapJSONtoCommittee($organizations);
 
     }
 
@@ -203,22 +190,7 @@ class FirstAgendaService {
     {
         $response = $this->makeGETRequest('committee/list/');
         $rawCommittees = $response->getMessage();
-        $committees = [];
-        foreach ($rawCommittees as $key => $rawCommittee) {
-            $committee = new ApiCommittee();
-            $committee
-                ->setName($rawCommittee->Name)
-                ->setSourceId($rawCommittee->SourceId)
-                ->setIsPublic($rawCommittee->IsPublic)
-                ->setIsHistorical($rawCommittee->IsHistorical)
-                ->setShowPublicCaptionForClosedItems($rawCommittee->ShowPublicCaptionForClosedItems)
-                ->setShowPublicDecisionForClosedItems($rawCommittee->ShowPublicDecisionForClosedItems)
-                ->setCommitteeUid($rawCommittee->CommitteeUid)
-                ->setOrganisationUid($rawCommittee->OrganisationUid);
-            $committees[$key] = $committee;
-        }
-
-        return $committees;
+        return $this->mapJSONtoCommittee($rawCommittees);
     }
 
     /**
@@ -273,6 +245,28 @@ class FirstAgendaService {
     public function getAllOrganizations($pageNumber = 0, $pageSize = 15, $sortDirection = null)
     {
 
+    }
+
+    /**
+     * @param array $committees
+     * @return array
+     */
+    private function mapJSONtoCommittee(array $committees): array
+    {
+        foreach($committees as $key => $org){
+            $committee = new ApiCommittee();
+            $committee
+                ->setName($org->Name)
+                ->setSourceId($org->SourceId)
+                ->setIsPublic($org->IsPublic)
+                ->setIsHistorical($org->IsHistorical)
+                ->setShowPublicCaptionForClosedItems($org->ShowPublicCaptionForClosedItems)
+                ->setShowPublicDecisionForClosedItems($org->ShowPublicDecisionForClosedItems)
+                ->setCommitteeUid($org->CommitteeUid)
+                ->setOrganisationUid($org->OrganisationUid);
+            $committees[$key] = $committee;
+        }
+        return $committees;
     }
 
     /**

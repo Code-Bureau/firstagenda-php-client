@@ -174,7 +174,7 @@ class ApiAgendaItem
      * @param mixed $caption
      * @return ApiAgendaItem
      */
-    public function setCaption($caption)
+    public function setCaption($caption): ApiAgendaItem
     {
         $this->caption = $caption;
         return $this;
@@ -191,15 +191,16 @@ class ApiAgendaItem
     /**
      * @param null $section
      */
-    public function setSection($section): void
+    public function setSection($section): ApiAgendaItem
     {
         $this->section = $section;
+        return $this;
     }
 
     /**
      * @return Collection
      */
-    public function getPresentations()
+    public function getPresentations(): Collection
     {
         return $this->presentations;
     }
@@ -207,7 +208,7 @@ class ApiAgendaItem
     /**
      * @param $presentation
      */
-    public function addPresentation($presentation)
+    public function addPresentation(Presentation $presentation)
     {
         $this->presentations->add($presentation);
     }
@@ -215,7 +216,7 @@ class ApiAgendaItem
     /**
      * @return Collection
      */
-    public function getDocuments()
+    public function getDocuments(): Collection
     {
         return $this->documents;
     }
@@ -223,7 +224,7 @@ class ApiAgendaItem
     /**
      * @param $document
      */
-    public function addDocuments($document)
+    public function addDocuments(Document $document)
     {
         $this->documents->add($document);
     }
@@ -231,7 +232,7 @@ class ApiAgendaItem
     /**
      * @param $decisionItem
      */
-    public function addDecisionItem($decisionItem)
+    public function addDecisionItem(Decision $decisionItem)
     {
         $this->itemDecision->add($decisionItem);
     }
@@ -239,7 +240,7 @@ class ApiAgendaItem
     /**
      * @return Collection
      */
-    public function getDecisionItems()
+    public function getDecisionItems(): Collection
     {
         return $this->itemDecision;
     }

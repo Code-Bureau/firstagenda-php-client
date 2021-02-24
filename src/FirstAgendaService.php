@@ -3,12 +3,15 @@
 namespace CodeBureau\FirstAgendaApi;
 
 use CodeBureau\FirstAgendaApi\Messages\ApiDownloadLink;
-use \DateTime;
-use Carbon\Carbon;
+use CodeBureau\FirstAgendaApi\Messages\Decision;
+use CodeBureau\FirstAgendaApi\Messages\Document;
+use CodeBureau\FirstAgendaApi\Messages\Presentation;
 use CodeBureau\FirstAgendaApi\Messages\ApiAgenda;
 use CodeBureau\FirstAgendaApi\messages\ApiAgendaItem;
 use CodeBureau\FirstAgendaApi\Messages\ApiResponse;
 use CodeBureau\FirstAgendaApi\Messages\ApiCommittee;
+use \DateTime;
+use Carbon\Carbon;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 
@@ -18,8 +21,14 @@ use GuzzleHttp\Exception\GuzzleException;
  */
 class FirstAgendaService {
 
+    /**
+     * @var TokenService
+     */
     private $tokenService;
 
+    /**
+     * @var Client
+     */
     private $client;
 
     /**
@@ -153,14 +162,44 @@ class FirstAgendaService {
             ->setAgendaUid($item->AgendaUid)
             ->setNumber($item->Number)
             ->setSorting($item->Sorting)
-            // ->setIsOpen($item->IsOpen)
+            ->setIsOpen($item->IsOpen)
             ->setCaseNumber($item->CaseNumber)
             ->setSourceId($item->SourceId)
-            ->setCaption($item->Caption);
-            // ->setSection($item->Section)
-            // ->setPresentations($item->Presentations)
-            // ->setDocuments($item->Documents)
-            // ->setItemDecision($item->ItemDecision)
+            ->setCaption($item->Caption)
+            ->setSection($item->Section);
+
+        if (count($item->Presentations) > 0) {
+            foreach ($item->Presentations as $presentationObj) {
+                $presentation = new Presentation();
+                $presentation
+                    ->setType($presentationObj->Type)
+                    ->setTitle($presentationObj->Title)
+                    ->setContent($presentationObj->Content)
+                    ->setDocumentId($presentationObj->DocumentUid);
+                $agendaItem->addPresentation($presentation);
+            }
+        }
+
+        if (count($item->Documents) > 0) {
+            foreach ($item->Documents as $documentObj) {
+                $document = new Document();
+                $document
+                    ->setTitle($documentObj->Title)
+                    ->setOrder($documentObj->Order)
+                    ->setUuid($documentObj->Uid);
+                $agendaItem
+                    ->addDocuments($document);
+            }
+        }
+
+        if (isset($item->ItemDecision)) {
+            $decision = new Decision();
+            $decision
+                ->setCreated(Carbon::parse($item->ItemDecision->Created))
+                ->setUpdated(Carbon::parse($item->ItemDecision->Updated))
+                ->setText($item->ItemDecision->Text);
+            $agendaItem->addDecisionItem($decision);
+        }
 
         return $agendaItem;
     }

@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.3.5]
+
+### Fixed
+- Bug in FirstAgendaService::getAgendaItem
+
 ## [v0.3.4]
 
 ### Changed

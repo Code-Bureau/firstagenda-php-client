@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.4.0]
+
+### Fixed
+- Bug in TokenService::getAuthToken
+
 ## [v0.3.6]
 
 ### Fixed

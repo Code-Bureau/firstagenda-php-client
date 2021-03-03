@@ -13,8 +13,14 @@ use GuzzleHttp\Exception\GuzzleException;
  */
 class TokenService
 {
+    /**
+     * @var Client
+     */
     private $client;
 
+    /**
+     * @var null
+     */
     private $token;
 
     /**
@@ -25,6 +31,7 @@ class TokenService
      */
     public function __construct ($clientId = null, $clientSecret = null)
     {
+        $this->token = null;
         $this->client = new Client([
             'base_uri' => 'https://identity.firstagenda.com',
             'timeout'  => 2.0,
@@ -33,7 +40,6 @@ class TokenService
                 'Accept' => 'application/json'
             ]
         ]);
-
 
         if (isset($clientId) && isset($clientSecret)) {
             $_ENV["ClientID"] = $clientId;
@@ -50,26 +56,27 @@ class TokenService
     public function getNewAuthToken ()
     {
         try {
-            $responseRaw = $this->client->post('/connect/token', [
-                        'form_params' => [
-                            'grant_type' => 'client_credentials',
-                            'scope' => 'prepare_integrationapi',
-                            'client_id' => $_ENV["ClientID"],
-                            'client_secret' => $_ENV["ClientSecret"]
-                        ]
-                    ])
-                    ->getBody()
-                    ->getContents();
+            $responseRaw = $this->client
+                ->post('/connect/token', [
+                    'form_params' => [
+                        'grant_type' => 'client_credentials',
+                        'scope' => 'prepare_integrationapi',
+                        'client_id' => $_ENV["ClientID"],
+                        'client_secret' => $_ENV["ClientSecret"]
+                    ]
+                ])
+                ->getBody()
+                ->getContents();
 
             // Map response object
             $response = json_decode($responseRaw);
 
-            //print_r($response);
             $token = $response->access_token;
             $expiryDate = Carbon::now()->addSeconds($response->expires_in);
 
             // Create new OAuthToken
             $authToken = new OAuthToken($token, $expiryDate);
+            $this->token = $authToken;
         } catch (GuzzleException $guzzleException) {
             $authToken = null;
         }
@@ -81,7 +88,11 @@ class TokenService
      */
     public function getAuthToken ()
     {
-        if (!$this->token || $this->token->isExpired()) {
+        if ($this->token && $this->token->isExpired()) {
+            $this->token = $this->getNewAuthToken();
+        }
+
+        if (!$this->token) {
             $this->token = $this->getNewAuthToken();
         }
 

@@ -197,7 +197,7 @@ class FirstAgendaService {
             $decision
                 ->setCreated(Carbon::parse($item->ItemDecision->Created))
                 ->setUpdated(Carbon::parse($item->ItemDecision->Updated))
-                ->setText($item->ItemDecision->Text);
+                ->setText($item->ItemDecision->Text ? $item->ItemDecision->Text : "" );
             $agendaItem->setDecisionItem($decision);
         }
 

@@ -15,6 +15,7 @@ use \DateTime;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\RequestOptions;
 
 /**
  * Class FirstAgendaService
@@ -321,22 +322,32 @@ class FirstAgendaService {
     }
 
     /**
-     * TODO:
+     * This function calls the endpoint
+     *
+     * /api/integration/publication/corporation
+     *
+     * The function supports all the default properties, for more information
+     * @see https://prepare.firstagenda.com/api/publication/swagger/index
      *
      * @param $documentUid
      */
     public function getPDFDocument($documentUid)
     {
-
+        TODO:
     }
 
     /**
      * @function getPDFDocumentUrl
      *
-     * Returns a temporary download URL for a PDF representation of the document identified by documentUid
+     * This function calls the endpoint
+     *
+     * /api/integration/publication/document/
+     *
+     * The function supports all the default properties, for more information
+     * @see https://prepare.firstagenda.com/api/publication/swagger/index
      *
      * @param $documentUid
-     * @return ApiDownloadLink
+     * @return ApiDownloadLink : Returns a temporary download URL for a PDF representation of the document identified by documentUid
      */
     public function getPDFDocumentUrl($documentUid): ApiDownloadLink
     {
@@ -367,6 +378,9 @@ class FirstAgendaService {
     }
 
     /**
+     *
+     * This is a private helper function that maps a JSON object to a Committee.
+     *
      * @param array $committees
      * @return array
      */

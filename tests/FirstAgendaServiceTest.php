@@ -110,6 +110,15 @@ class FirstAgendaServiceTest extends TestCase
         self::assertIsObject($details);
     }
 
+    /**
+     * @covers \CodeBureau\FirstAgendaApi\FirstAgendaService::getPDFDocument
+     * @test
+     */
+    public function getPDFDocument()
+    {
+        $this->service->getPDFDocument("7e0e70aa-363f-4380-a0f3-b6f7971c2b18");
+    }
+
         /**
      * @covers \CodeBureau\FirstAgendaApi\FirstAgendaService::getPDFDocumentUrl
      * @test

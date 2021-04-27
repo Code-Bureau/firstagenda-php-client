@@ -59,6 +59,13 @@ class FirstAgendaService {
     }
 
     /**
+     * This function calls the endpoint
+     *
+     * /api/integration/publication/agenda/list/bycommittee/{committeeUid}
+     *
+     * The function supports all the default properties, for more information
+     * @see https://prepare.firstagenda.com/api/publication/swagger/index
+     *
      * @param $committeeUid
      * @param string $pageNumber
      * @param string $pageSize
@@ -212,11 +219,9 @@ class FirstAgendaService {
      */
     public function getCommitteesInOrganizations(string $uuid, $corporationUuid = '', Carbon $publicationDate = null): array
     {
-
         $response = $this->makeGETRequest('committee/list/byorganisation/' . $uuid);
         $organizations = $response->getMessage();
         return $this->mapJSONtoCommittee($organizations);
-
     }
 
     /**

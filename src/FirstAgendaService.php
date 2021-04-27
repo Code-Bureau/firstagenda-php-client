@@ -168,6 +168,13 @@ class FirstAgendaService {
     }
 
     /**
+     * This function calls the endpoint
+     *
+     *  /api/integration/publication/agendaitem/{agendaItemUid}
+     *
+     * The function supports all the default properties, for more information
+     * @see https://prepare.firstagenda.com/api/publication/swagger/index
+     *
      * @param $agendaItemUid
      * @param null $includePrefixOnClosedItems
      * @param null $preserveInlineStyling
@@ -175,7 +182,23 @@ class FirstAgendaService {
      */
     public function getAgendaItem($agendaItemUid, $includePrefixOnClosedItems = null, $preserveInlineStyling = null ): ApiAgendaItem
     {
-        $response = $this->makeGETRequest('agendaitem/' . $agendaItemUid);
+        if (  function_exists('http_build_query') ) {
+            // Build Params
+            $paramsData = [];
+
+            if ( isset($includePrefixOnClosedItems) && is_bool($includePrefixOnClosedItems) ) {
+                $paramsData['includePrefixOnClosedItems'] = $includePrefixOnClosedItems;
+            }
+
+            if ( isset($preserveInlineStyling) && is_bool($preserveInlineStyling) ) {
+                $paramsData['preserveInlineStyling'] = $preserveInlineStyling;
+            }
+
+            $response = $this->makeGETRequest('agendaitem/' . $agendaItemUid .'?' . http_build_query($paramsData) );
+        } else {
+            $response = $this->makeGETRequest('agendaitem/' . $agendaItemUid );
+        }
+
         $item = $response->getMessage();
         $agendaItem = new ApiAgendaItem($item->Uid);
         $agendaItem
@@ -365,7 +388,14 @@ class FirstAgendaService {
      * @param $searchContent
      * @return string
      */
-    private function generateParams($pageNumber, $pageSize, $sortDirection, $agendaMeetingBeginFrom, $agendaMeetingBeginTo, $searchContent): string
+    private function generateParams(
+        $pageNumber,
+        $pageSize,
+        $sortDirection,
+        $agendaMeetingBeginFrom,
+        $agendaMeetingBeginTo,
+        $searchContent
+    ): string
     {
         // Build Params
         $paramsData = [];

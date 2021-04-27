@@ -248,27 +248,58 @@ class FirstAgendaService {
     }
 
     /**
+     * This function calls the endpoint
+     *
+     * /api/integration/publication/committee/list/byorganisation/{organisationUid}
+     *
+     * The function supports all the default properties, for more information
+     * @see https://prepare.firstagenda.com/api/publication/swagger/index
+     *
      * @param string $uuid
-     * @param string $corporationUuid
-     * @param Carbon|null $publicationDate
+     * @param int $pageNumber
+     * @param int $pageSize
+     * @param int $sortDirection
      * @return array
      */
-    public function getCommitteesInOrganizations(string $uuid, $corporationUuid = '', Carbon $publicationDate = null): array
+    public function getCommitteesInOrganizations(string $uuid, $pageNumber = 0, $pageSize = 15, $sortDirection = 0): array
     {
-        $response = $this->makeGETRequest('committee/list/byorganisation/' . $uuid);
+        if ( !function_exists('http_build_query') ) {
+            $response = $this->makeGETRequest('committee/list/byorganisation/' . $uuid);
+            $organizations = $response->getMessage();
+            return $this->mapJSONtoCommittee($organizations);
+        }
+
+        $params = $this->generateParams($pageNumber, $pageSize, $sortDirection, null, null, null);
+
+        $response = $this->makeGETRequest('committee/list/byorganisation/' . $uuid . $params);
         $organizations = $response->getMessage();
         return $this->mapJSONtoCommittee($organizations);
     }
 
     /**
+     * This function calls the endpoint
+     *
+     * /api/integration/publication/committee/list
+     *
+     * The function supports all the default properties, for more information
+     * @see https://prepare.firstagenda.com/api/publication/swagger/index
+     *
      * @param int $pageNumber
      * @param int $pageSize
      * @param null $sortDirection
      * @return array
      */
-    public function getAllCommitteesAvailable($pageNumber = 0, $pageSize = 15, $sortDirection = null): array
+    public function getAllCommitteesAvailable($pageNumber = 0, $pageSize = 15, $sortDirection = 0): array
     {
-        $response = $this->makeGETRequest('committee/list/');
+        if ( !function_exists('http_build_query') ) {
+            $response = $this->makeGETRequest('committee/list');
+            $rawCommittees = $response->getMessage();
+            return $this->mapJSONtoCommittee($rawCommittees);
+        }
+
+        $params = $this->generateParams($pageSize, $pageSize, $sortDirection, null, null,null);
+
+        $response = $this->makeGETRequest('committee/list' . $params);
         $rawCommittees = $response->getMessage();
         return $this->mapJSONtoCommittee($rawCommittees);
     }

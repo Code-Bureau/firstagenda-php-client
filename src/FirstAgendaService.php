@@ -119,6 +119,13 @@ class FirstAgendaService {
     }
 
     /**
+     * This function calls the endpoint
+     *
+     * /api/integration/publication/agenda/{agendaUid}
+     *
+     * The function supports all the default properties, for more information
+     * @see https://prepare.firstagenda.com/api/publication/swagger/index
+     *
      * @param $agendaUid
      * @return ApiAgenda
      */

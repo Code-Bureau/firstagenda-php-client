@@ -100,8 +100,17 @@ class FirstAgendaServiceTest extends TestCase
         self::assertIsArray($committees, 'Expected array with objects of type CodeBureau\FirstAgendaApi\Messages\Committee');
     }
 
-
     /**
+     * @covers \CodeBureau\FirstAgendaApi\FirstAgendaService::getCorporationDetails
+     * @test
+     */
+    public function getCorporationsDetails()
+    {
+        $details = $this->service->getCorporationDetails();
+        self::assertIsObject($details);
+    }
+
+        /**
      * @covers \CodeBureau\FirstAgendaApi\FirstAgendaService::getPDFDocumentUrl
      * @test
      */
@@ -110,4 +119,5 @@ class FirstAgendaServiceTest extends TestCase
         $urlObject = $this->service->getPDFDocumentUrl($_ENV['TestDocumentID']);
         self:self::assertIsObject($urlObject);
     }
+
 }

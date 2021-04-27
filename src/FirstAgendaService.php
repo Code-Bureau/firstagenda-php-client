@@ -3,6 +3,7 @@
 namespace CodeBureau\FirstAgendaApi;
 
 use CodeBureau\FirstAgendaApi\Messages\ApiDownloadLink;
+use CodeBureau\FirstAgendaApi\Messages\Corporation;
 use CodeBureau\FirstAgendaApi\Messages\Decision;
 use CodeBureau\FirstAgendaApi\Messages\Document;
 use CodeBureau\FirstAgendaApi\Messages\Presentation;
@@ -305,11 +306,18 @@ class FirstAgendaService {
     }
 
     /**
-     * TODO:
+     * This function calls the endpoint
+     *
+     * /api/integration/publication/corporation
+     *
+     * The function supports all the default properties, for more information
+     * @see https://prepare.firstagenda.com/api/publication/swagger/index
+     *
      */
     public function getCorporationDetails()
     {
-
+        $response = $this->makeGETRequest('corporation');
+        return $response->getMessage();
     }
 
     /**

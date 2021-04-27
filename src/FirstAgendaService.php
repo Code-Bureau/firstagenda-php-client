@@ -89,6 +89,12 @@ class FirstAgendaService {
     }
 
     /**
+     * This function calls the endpoint
+     *
+     * /api/integration/publication/agenda/list/byorganisation/{organisationUid}
+     *
+     * The function supports all the default properties, for more information
+     * @see https://prepare.firstagenda.com/api/publication/swagger/index
      *
      * @param $organizationUid
      * @param int $pageNumber

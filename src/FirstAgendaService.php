@@ -3,7 +3,6 @@
 namespace CodeBureau\FirstAgendaApi;
 
 use CodeBureau\FirstAgendaApi\Messages\ApiDownloadLink;
-use CodeBureau\FirstAgendaApi\Messages\Corporation;
 use CodeBureau\FirstAgendaApi\Messages\Decision;
 use CodeBureau\FirstAgendaApi\Messages\Document;
 use CodeBureau\FirstAgendaApi\Messages\Presentation;
@@ -11,7 +10,7 @@ use CodeBureau\FirstAgendaApi\Messages\ApiAgenda;
 use CodeBureau\FirstAgendaApi\messages\ApiAgendaItem;
 use CodeBureau\FirstAgendaApi\Messages\ApiResponse;
 use CodeBureau\FirstAgendaApi\Messages\ApiCommittee;
-use \DateTime;
+use DateTime;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
@@ -20,7 +19,8 @@ use GuzzleHttp\Exception\GuzzleException;
  * Class FirstAgendaService
  * @package CodeBureau\FirstAgendaApi
  */
-class FirstAgendaService {
+class FirstAgendaService
+{
 
     /**
      * @var TokenService
@@ -43,7 +43,7 @@ class FirstAgendaService {
         $this->client = new Client(
             [
                 'base_uri' => 'https://prepare.firstagenda.com/api/integration/publication/',
-                'timeout'  => 2.0,
+                'timeout' => 2.0,
                 'headers' => [
                     'Accept' => 'application/json',
                     'Content-Type' => 'application/json',
@@ -60,6 +60,8 @@ class FirstAgendaService {
     }
 
     /**
+     * @function getAgendasByCommittee
+     *
      * This function calls the endpoint
      *
      * /api/integration/publication/agenda/list/bycommittee/{committeeUid}
@@ -76,9 +78,9 @@ class FirstAgendaService {
      * @param string $searchContent
      * @return array
      */
-    public function getAgendasByCommittee($committeeUid, $pageNumber = null, $pageSize = null, $sortDirection = null, $agendaMeetingBeginFrom = null, $agendaMeetingBeginTo = null, $searchContent = null) : array
+    public function getAgendasByCommittee($committeeUid, $pageNumber = null, $pageSize = null, $sortDirection = null, $agendaMeetingBeginFrom = null, $agendaMeetingBeginTo = null, $searchContent = null): array
     {
-        if ( !function_exists('http_build_query') ) {
+        if (!function_exists('http_build_query')) {
             $response = $this->makeGETRequest('agenda/list/bycommittee/' . $committeeUid);
             return $this->mapJSONtoAgenda($response->getMessage());
         }
@@ -90,6 +92,8 @@ class FirstAgendaService {
     }
 
     /**
+     * @function getAgendasByOrganization
+     *
      * This function calls the endpoint
      *
      * /api/integration/publication/agenda/list/byorganisation/{organisationUid}
@@ -108,7 +112,7 @@ class FirstAgendaService {
      */
     public function getAgendasByOrganization($organizationUid, $pageNumber = 0, $pageSize = 15, $sortDirection = 0, $agendaMeetingBeginFrom = null, $agendaMeetingBeginTo = null, $searchContent = null): array
     {
-        if ( !function_exists('http_build_query') ) {
+        if (!function_exists('http_build_query')) {
             $response = $this->makeGETRequest('agenda/list/byorganisation/' . $organizationUid);
             return $this->mapJSONtoAgenda($response->getMessage());
         }
@@ -120,6 +124,8 @@ class FirstAgendaService {
     }
 
     /**
+     * @function getAgenda
+     *
      * This function calls the endpoint
      *
      * /api/integration/publication/agenda/{agendaUid}
@@ -169,6 +175,8 @@ class FirstAgendaService {
     }
 
     /**
+     * @function getAgendaItem
+     *
      * This function calls the endpoint
      *
      *  /api/integration/publication/agendaitem/{agendaItemUid}
@@ -181,23 +189,15 @@ class FirstAgendaService {
      * @param null $preserveInlineStyling
      * @return ApiAgendaItem
      */
-    public function getAgendaItem($agendaItemUid, $includePrefixOnClosedItems = null, $preserveInlineStyling = null ): ApiAgendaItem
+    public function getAgendaItem($agendaItemUid, $includePrefixOnClosedItems = null, $preserveInlineStyling = null): ApiAgendaItem
     {
-        if (  function_exists('http_build_query') ) {
+        if (function_exists('http_build_query')) {
             // Build Params
-            $paramsData = [];
+            $params = $this->generateParamsForAgendaItems($includePrefixOnClosedItems, $preserveInlineStyling);
 
-            if ( isset($includePrefixOnClosedItems) && is_bool($includePrefixOnClosedItems) ) {
-                $paramsData['includePrefixOnClosedItems'] = $includePrefixOnClosedItems;
-            }
-
-            if ( isset($preserveInlineStyling) && is_bool($preserveInlineStyling) ) {
-                $paramsData['preserveInlineStyling'] = $preserveInlineStyling;
-            }
-
-            $response = $this->makeGETRequest('agendaitem/' . $agendaItemUid .'?' . http_build_query($paramsData) );
+            $response = $this->makeGETRequest('agendaitem/' . $agendaItemUid . $params);
         } else {
-            $response = $this->makeGETRequest('agendaitem/' . $agendaItemUid );
+            $response = $this->makeGETRequest('agendaitem/' . $agendaItemUid);
         }
 
         $item = $response->getMessage();
@@ -241,7 +241,7 @@ class FirstAgendaService {
             $decision
                 ->setCreated(Carbon::parse($item->ItemDecision->Created))
                 ->setUpdated(Carbon::parse($item->ItemDecision->Updated))
-                ->setText($item->ItemDecision->Text ? $item->ItemDecision->Text : "" );
+                ->setText($item->ItemDecision->Text ?: "");
             $agendaItem->setDecisionItem($decision);
         }
 
@@ -249,6 +249,8 @@ class FirstAgendaService {
     }
 
     /**
+     * @function getCommitteesInOrganizations
+     *
      * This function calls the endpoint
      *
      * /api/integration/publication/committee/list/byorganisation/{organisationUid}
@@ -264,7 +266,7 @@ class FirstAgendaService {
      */
     public function getCommitteesInOrganizations(string $uuid, $pageNumber = 0, $pageSize = 15, $sortDirection = 0): array
     {
-        if ( !function_exists('http_build_query') ) {
+        if (!function_exists('http_build_query')) {
             $response = $this->makeGETRequest('committee/list/byorganisation/' . $uuid);
             $organizations = $response->getMessage();
             return $this->mapJSONtoCommittee($organizations);
@@ -278,6 +280,8 @@ class FirstAgendaService {
     }
 
     /**
+     * @function getAllCommitteesAvailable
+     *
      * This function calls the endpoint
      *
      * /api/integration/publication/committee/list
@@ -292,13 +296,13 @@ class FirstAgendaService {
      */
     public function getAllCommitteesAvailable($pageNumber = 0, $pageSize = 15, $sortDirection = 0): array
     {
-        if ( !function_exists('http_build_query') ) {
+        if (!function_exists('http_build_query')) {
             $response = $this->makeGETRequest('committee/list');
             $rawCommittees = $response->getMessage();
             return $this->mapJSONtoCommittee($rawCommittees);
         }
 
-        $params = $this->generateParams($pageSize, $pageSize, $sortDirection, null, null,null);
+        $params = $this->generateParams($pageNumber, $pageSize, $sortDirection, null, null, null);
 
         $response = $this->makeGETRequest('committee/list' . $params);
         $rawCommittees = $response->getMessage();
@@ -306,6 +310,8 @@ class FirstAgendaService {
     }
 
     /**
+     * @function getCorporationDetails
+     *
      * This function calls the endpoint
      *
      * /api/integration/publication/corporation
@@ -321,6 +327,8 @@ class FirstAgendaService {
     }
 
     /**
+     * @function getPDFDocument
+     *
      * This function calls the endpoint
      *
      * /api/integration/publication/corporation
@@ -365,6 +373,7 @@ class FirstAgendaService {
     }
 
     /**
+     * @function getAllOrganizations
      *
      * This function calls the endpoint
      *
@@ -373,33 +382,34 @@ class FirstAgendaService {
      * The function supports all the default properties, for more information
      * @see https://prepare.firstagenda.com/api/publication/swagger/index
      *
-     * @param int $pageNumber
-     * @param int $pageSize
-     * @param null $sortDirection
+     * @param int $pageNumber :
+     * @param int $pageSize :
+     * @param null $sortDirection :
      */
     public function getAllOrganizations($pageNumber = 0, $pageSize = 15, $sortDirection = null)
     {
-        if ( !function_exists('http_build_query') ) {
+        if (!function_exists('http_build_query')) {
             $response = $this->makeGETRequest('organisation/list');
             return $response->getMessage();
         }
 
-        $params = $this->generateParams($pageNumber, $pageSize,$sortDirection,null,null,null);
+        $params = $this->generateParams($pageNumber, $pageSize, $sortDirection, null, null, null);
 
         $response = $this->makeGETRequest('organisation/list' . $params);
         return $response->getMessage();
     }
 
     /**
+     * @function mapJSONtoCommittee
      *
      * This is a private helper function that maps a JSON object to a Committee.
      *
-     * @param array $committees
-     * @return array
+     * @param array $committees : An array of JSON objects
+     * @return array : Returns an array of ApiCommittee objects
      */
     private function mapJSONtoCommittee(array $committees): array
     {
-        foreach($committees as $key => $org){
+        foreach ($committees as $key => $org) {
             $committee = new ApiCommittee();
             $committee
                 ->setName($org->Name)
@@ -416,12 +426,16 @@ class FirstAgendaService {
     }
 
     /**
-     * @param array $agendas
-     * @return array
+     * @function mapJSONtoAgenda
+     *
+     * Helper function to create ApiAgenda objects.
+     *
+     * @param array $agendas : An array of JSON objects
+     * @return array : Returns an array of ApiAgenda objects
      */
     private function mapJSONtoAgenda(array $agendas): array
     {
-        foreach($agendas as $key => $agn) {
+        foreach ($agendas as $key => $agn) {
             $agenda = new ApiAgenda();
             $agenda
                 ->setAgendaUid($agn->AgendaUid)
@@ -446,8 +460,12 @@ class FirstAgendaService {
     }
 
     /**
-     * @param $pageNumber
-     * @param $pageSize
+     * @function generateParams
+     *
+     * Helper function to generate the params for a number of HTTP GET.
+     *
+     * @param int $pageNumber
+     * @param int $pageSize
      * @param $sortDirection
      * @param $agendaMeetingBeginFrom
      * @param $agendaMeetingBeginTo
@@ -455,8 +473,8 @@ class FirstAgendaService {
      * @return string
      */
     private function generateParams(
-        $pageNumber,
-        $pageSize,
+        int $pageNumber,
+        int $pageSize,
         $sortDirection,
         $agendaMeetingBeginFrom,
         $agendaMeetingBeginTo,
@@ -493,8 +511,37 @@ class FirstAgendaService {
     }
 
     /**
-     * @param $url
-     * @return ApiResponse
+     * @function generateParamsForAgendaItems
+     *
+     * Small helper function to create the params for the HTTP GET on AgendaItems.
+     *
+     * @param $includePrefixOnClosedItems
+     * @param $preserveInlineStyling
+     * @return string
+     */
+    private function generateParamsForAgendaItems($includePrefixOnClosedItems, $preserveInlineStyling): string
+    {
+        $paramsData = [];
+
+        if (isset($includePrefixOnClosedItems) && is_bool($includePrefixOnClosedItems)) {
+            $paramsData['includePrefixOnClosedItems'] = $includePrefixOnClosedItems;
+        }
+
+        if (isset($preserveInlineStyling) && is_bool($preserveInlineStyling)) {
+            $paramsData['preserveInlineStyling'] = $preserveInlineStyling;
+        }
+
+        return '?' . http_build_query($paramsData);
+    }
+
+
+    /**
+     * @function makeGETRequest
+     *
+     * This function make a HTTP GET call to the given url.
+     *
+     * @param $url : The URL to be called.
+     * @return ApiResponse : The response object.
      */
     private function makeGETRequest($url): ApiResponse
     {

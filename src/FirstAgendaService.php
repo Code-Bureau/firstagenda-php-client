@@ -15,7 +15,6 @@ use \DateTime;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\RequestOptions;
 
 /**
  * Class FirstAgendaService
@@ -366,7 +365,13 @@ class FirstAgendaService {
     }
 
     /**
-     * TODO:
+     *
+     * This function calls the endpoint
+     *
+     * /api/integration/publication/organisation/list
+     *
+     * The function supports all the default properties, for more information
+     * @see https://prepare.firstagenda.com/api/publication/swagger/index
      *
      * @param int $pageNumber
      * @param int $pageSize
@@ -374,7 +379,15 @@ class FirstAgendaService {
      */
     public function getAllOrganizations($pageNumber = 0, $pageSize = 15, $sortDirection = null)
     {
+        if ( !function_exists('http_build_query') ) {
+            $response = $this->makeGETRequest('organisation/list');
+            return $response->getMessage();
+        }
 
+        $params = $this->generateParams($pageNumber, $pageSize,$sortDirection,null,null,null);
+
+        $response = $this->makeGETRequest('organisation/list' . $params);
+        return $response->getMessage();
     }
 
     /**

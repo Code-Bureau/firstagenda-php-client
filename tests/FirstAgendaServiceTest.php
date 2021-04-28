@@ -126,7 +126,17 @@ class FirstAgendaServiceTest extends TestCase
     public function getPDFDocumentURL()
     {
         $urlObject = $this->service->getPDFDocumentUrl($_ENV['TestDocumentID']);
-        self:self::assertIsObject($urlObject);
+        self::assertIsObject($urlObject);
+    }
+
+    /**
+     * @covers \CodeBureau\FirstAgendaApi\FirstAgendaService::getAllOrganizations
+     * @test
+     */
+    public function getOrganizationsList()
+    {
+        $organizationList = $this->service->getAllOrganizations();
+        self::assertIsArray($organizationList);
     }
 
 }

@@ -278,9 +278,19 @@ class ApiAgendaItem
             'sourceId' => $this->getSourceId(),
             'caption' => $this->getCaption(),
             'section' => $this->getSection(),
-            'presentations' => $this->getPresentations(),
-            'documents' => $this->getDocuments(),
-            'itemDecision' => $this->getDecisionItem()
+            'presentations' => $this->getPresentations()->map(function (Presentation $presentation) {
+                return array(
+                    'title' => $presentation->getTitle(),
+                    'docuemntId' => $presentation->getDocumentId()
+                );
+            })->toArray(),
+            'documents' => $this->getDocuments()->map(function (Document $document) {
+                return array(
+                    'title' => $document->getTitle(),
+                    'documentId' => $document->getUuid()
+                );
+            })->toArray(),
+            'itemDecision' => $this->getDecisionItem() ? $this->getDecisionItem()->getText() : null
         );
     }
 }

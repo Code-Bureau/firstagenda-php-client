@@ -66,7 +66,7 @@ class ApiAgendaItem
      * @param mixed $agendaUid
      * @return ApiAgendaItem
      */
-    public function setAgendaUid($agendaUid)
+    public function setAgendaUid($agendaUid): ApiAgendaItem
     {
         $this->agendaUid = $agendaUid;
         return $this;
@@ -84,7 +84,7 @@ class ApiAgendaItem
      * @param mixed $number
      * @return ApiAgendaItem
      */
-    public function setNumber($number)
+    public function setNumber($number): ApiAgendaItem
     {
         $this->number = $number;
         return $this;
@@ -102,7 +102,7 @@ class ApiAgendaItem
      * @param null $sorting
      * @return ApiAgendaItem
      */
-    public function setSorting($sorting)
+    public function setSorting($sorting): ApiAgendaItem
     {
         $this->sorting = $sorting;
         return $this;
@@ -120,7 +120,7 @@ class ApiAgendaItem
      * @param null $isOpen
      * @return ApiAgendaItem
      */
-    public function setIsOpen($isOpen)
+    public function setIsOpen($isOpen): ApiAgendaItem
     {
         $this->isOpen = $isOpen;
         return $this;
@@ -138,7 +138,7 @@ class ApiAgendaItem
      * @param mixed $caseNumber
      * @return ApiAgendaItem
      */
-    public function setCaseNumber($caseNumber)
+    public function setCaseNumber($caseNumber): ApiAgendaItem
     {
         $this->caseNumber = $caseNumber;
         return $this;
@@ -156,7 +156,7 @@ class ApiAgendaItem
      * @param mixed $sourceId
      * @return ApiAgendaItem
      */
-    public function setSourceId($sourceId)
+    public function setSourceId($sourceId): ApiAgendaItem
     {
         $this->sourceId = $sourceId;
         return $this;
@@ -206,11 +206,13 @@ class ApiAgendaItem
     }
 
     /**
-     * @param $presentation
+     * @param Presentation $presentation
+     * @return ApiAgendaItem
      */
-    public function addPresentation(Presentation $presentation)
+    public function addPresentation(Presentation $presentation): ApiAgendaItem
     {
         $this->presentations->add($presentation);
+        return $this;
     }
 
     /**
@@ -222,28 +224,63 @@ class ApiAgendaItem
     }
 
     /**
-     * @param $document
-     */
-    public function addDocuments(Document $document)
-    {
-        $this->documents->add($document);
-    }
-
-    /**
-     * @param $decisionItem
+     * @param Document $document
      * @return ApiAgendaItem
      */
-    public function setDecisionItem(Decision $decisionItem): ApiAgendaItem
+    public function addDocuments(Document $document): ApiAgendaItem
     {
-        $this->itemDecision = ($decisionItem);
+        $this->documents->add($document);
         return $this;
     }
 
     /**
+     * @function setDecisionItem
+     *
+     * This method sets the decision Item and returns the class instance.
+     *
+     * @param Decision $decisionItem
+     * @return ApiAgendaItem
+     */
+    public function setDecisionItem(Decision $decisionItem): ApiAgendaItem
+    {
+        $this->itemDecision = $decisionItem;
+        return $this;
+    }
+
+    /**
+     * @function getDecisionItem
+     *
+     * This method returns the decision item.
+     *
      * @return Decision || null
      */
     public function getDecisionItem(): ?Decision
     {
         return $this->itemDecision;
+    }
+
+    /**
+     * @function toArray
+     *
+     * This method returns an array with all the properties of this class.
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return array(
+            'uid' => $this->getUid(),
+            'agendaUid' => $this->getAgendaUid(),
+            'number' => $this->getNumber(),
+            'sorting' => $this->getSorting(),
+            'isOpen' => $this->getIsOpen(),
+            'caseNumber' => $this->getCaseNumber(),
+            'sourceId' => $this->getSourceId(),
+            'caption' => $this->getCaption(),
+            'section' => $this->getSection(),
+            'presentations' => $this->getPresentations(),
+            'documents' => $this->getDocuments(),
+            'itemDecision' => $this->getDecisionItem()
+        );
     }
 }

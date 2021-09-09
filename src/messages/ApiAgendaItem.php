@@ -281,7 +281,7 @@ class ApiAgendaItem
             'presentations' => $this->getPresentations()->map(function (Presentation $presentation) {
                 return array(
                     'title' => $presentation->getTitle(),
-                    'docuemntId' => $presentation->getDocumentId()
+                    'documentId' => $presentation->getDocumentId()
                 );
             })->toArray(),
             'documents' => $this->getDocuments()->map(function (Document $document) {

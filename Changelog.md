@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+## [v0.4.5]
+
+### Added
+- Added a 404 check to the FirstAgendaService method getAgenda.
+
 ## [v0.4.2]
 
 ### Added

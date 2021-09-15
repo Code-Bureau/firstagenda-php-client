@@ -134,11 +134,16 @@ class FirstAgendaService
      * @see https://prepare.firstagenda.com/api/publication/swagger/index
      *
      * @param $agendaUid
-     * @return ApiAgenda
+     * @return ApiAgenda|null
      */
-    public function getAgenda($agendaUid): ApiAgenda
+    public function getAgenda($agendaUid): ?ApiAgenda
     {
         $response = $this->makeGETRequest('agenda/' . $agendaUid);
+
+        if ($response->getStatus() === 404) {
+            return null;
+        }
+
         $agn = $response->getMessage();
         $items = collect($agn->Items)->map(function ($item) {
             $a = new ApiAgendaItem($item->Uid);

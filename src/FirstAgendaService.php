@@ -440,6 +440,10 @@ class FirstAgendaService
      */
     private function mapJSONtoAgenda(array $agendas): array
     {
+        if (0 === count($agendas)) {
+            return [];
+        }
+
         foreach ($agendas as $key => $agn) {
             $agenda = new ApiAgenda();
             $agenda

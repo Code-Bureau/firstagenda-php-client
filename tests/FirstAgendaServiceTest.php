@@ -46,7 +46,7 @@ class FirstAgendaServiceTest extends TestCase
      */
     public function getAgendasByCommitteeWithParams()
     {
-        $agendas = $this->service->getAgendasByCommittee($_ENV['TestCommitteeID'],0,null,1,);
+        $agendas = $this->service->getAgendasByCommittee($_ENV['TestCommitteeID'],0,20,1,);
         self::assertIsArray($agendas);
     }
 

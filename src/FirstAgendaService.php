@@ -70,15 +70,15 @@ class FirstAgendaService
      * @see https://prepare.firstagenda.com/api/publication/swagger/index
      *
      * @param $committeeUid
-     * @param string $pageNumber
-     * @param string $pageSize
-     * @param string $sortDirection
-     * @param string $agendaMeetingBeginFrom
-     * @param string $agendaMeetingBeginTo
-     * @param string $searchContent
+     * @param string|null $pageNumber
+     * @param string|null $pageSize
+     * @param string|null $sortDirection
+     * @param string|null $agendaMeetingBeginFrom
+     * @param string|null $agendaMeetingBeginTo
+     * @param string|null $searchContent
      * @return array
      */
-    public function getAgendasByCommittee($committeeUid, $pageNumber = null, $pageSize = null, $sortDirection = null, $agendaMeetingBeginFrom = null, $agendaMeetingBeginTo = null, $searchContent = null): array
+    public function getAgendasByCommittee($committeeUid, string $pageNumber = null, string $pageSize = null, string $sortDirection = null, string $agendaMeetingBeginFrom = null, string $agendaMeetingBeginTo = null, string $searchContent = null): array
     {
         if (!function_exists('http_build_query')) {
             $response = $this->makeGETRequest('agenda/list/bycommittee/' . $committeeUid);
@@ -269,7 +269,7 @@ class FirstAgendaService
      * @param int $sortDirection
      * @return array
      */
-    public function getCommitteesInOrganizations(string $uuid, $pageNumber = 0, $pageSize = 15, $sortDirection = 0): array
+    public function getCommitteesInOrganizations(string $uuid, int $pageNumber = 0, int $pageSize = 15, int $sortDirection = 0): array
     {
         if (!function_exists('http_build_query')) {
             $response = $this->makeGETRequest('committee/list/byorganisation/' . $uuid);
@@ -409,8 +409,8 @@ class FirstAgendaService
      *
      * This is a private helper function that maps a JSON object to a Committee.
      *
-     * @param array $committees : An array of JSON objects
-     * @return array : Returns an array of ApiCommittee objects
+     * @param array $committees An array of JSON objects
+     * @return array            Returns an array of ApiCommittee objects
      */
     private function mapJSONtoCommittee(array $committees): array
     {
@@ -473,21 +473,21 @@ class FirstAgendaService
      *
      * Helper function to generate the params for a number of HTTP GET.
      *
-     * @param int $pageNumber
-     * @param int $pageSize
-     * @param $sortDirection
-     * @param $agendaMeetingBeginFrom
-     * @param $agendaMeetingBeginTo
-     * @param $searchContent
+     * @param string|null $pageNumber
+     * @param string|null $pageSize
+     * @param string|null $sortDirection
+     * @param string|null $agendaMeetingBeginFrom
+     * @param string|null $agendaMeetingBeginTo
+     * @param string|null $searchContent
      * @return string
      */
     private function generateParams(
-        int $pageNumber,
-        int $pageSize,
-        $sortDirection,
-        $agendaMeetingBeginFrom,
-        $agendaMeetingBeginTo,
-        $searchContent
+        string $pageNumber = null,
+        string $pageSize = null,
+        string $sortDirection = null,
+        string $agendaMeetingBeginFrom = null,
+        string $agendaMeetingBeginTo = null,
+        string $searchContent = null
     ): string
     {
         // Build Params
@@ -504,15 +504,15 @@ class FirstAgendaService
             $paramsData['sortDirection'] = $sortDirection;
         }
 
-        if (isset($agendaMeetingBeginFrom) && $agendaMeetingBeginFrom instanceof DateTime) {
+        if (is_string($agendaMeetingBeginFrom)) {
             $paramsData['agendaMeetingBeginFrom'] = $agendaMeetingBeginFrom;
         }
 
-        if (isset($agendaMeetingBeginTo) && $agendaMeetingBeginTo instanceof DateTime) {
+        if (is_string($agendaMeetingBeginTo)) {
             $paramsData['agendaMeetingBeginTo'] = $agendaMeetingBeginTo;
         }
 
-        if (isset($searchContent) && is_string($searchContent)) {
+        if (is_string($searchContent)) {
             $paramsData['searchContent'] = $searchContent;
         }
 

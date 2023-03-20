@@ -12,6 +12,7 @@ use CodeBureau\FirstAgendaApi\Messages\ApiResponse;
 use CodeBureau\FirstAgendaApi\Messages\ApiCommittee;
 use DateTime;
 use Carbon\Carbon;
+use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 
@@ -551,10 +552,15 @@ class FirstAgendaService
      *
      * @param $url : The URL to be called.
      * @return ApiResponse : The response object.
+     * @throws Exception
      */
     private function makeGETRequest($url): ApiResponse
     {
         $authToken = $this->tokenService->getAuthToken();
+
+        if (is_null($authToken)) {
+            throw new Exception('FirstAgenda Authorization Service is down.',500);
+        }
 
         try {
             $response = $this->client->get($url, [

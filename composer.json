@@ -1,8 +1,7 @@
 {
     "name": "code-bureau/firstagenda-php-client",
-    "description": "",
+    "description": "This is a API wrapper for the FirstAgenda API.",
     "type": "library",
-    "version": "v0.4.8",
     "license": "MIT",
     "authors": [
         {

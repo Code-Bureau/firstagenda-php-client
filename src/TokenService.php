@@ -33,7 +33,7 @@ class TokenService
     {
         $this->token = null;
         $this->client = new Client([
-            'base_uri' => 'https://identity.firstagenda.com',
+            'base_uri' => 'https://auth.firstagenda.com',
             'timeout'  => 2.0,
             'headers' => [
                 'Content-Type' => 'application/x-www-form-urlencoded',

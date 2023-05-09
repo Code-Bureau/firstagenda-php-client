@@ -146,35 +146,35 @@ class FirstAgendaService
         }
 
         $agn = $response->getMessage();
-        $items = collect($agn->Items)->map(function ($item) {
-            $a = new ApiAgendaItem($item->Uid);
+        $items = collect($agn->items)->map(function ($item) {
+            $a = new ApiAgendaItem($item->uid);
             return $a
-                ->setAgendaUid($item->AgendaUid)
-                ->setNumber($item->Number)
-                ->setIsOpen($item->IsPublic)
-                ->setCaseNumber($item->CaseNumber)
-                ->setSourceId($item->SourceId)
-                ->setCaption($item->Caption);
+                ->setAgendaUid($item->agendaUid)
+                ->setNumber($item->number)
+                ->setIsOpen($item->isPublic)
+                ->setCaseNumber($item->caseNumber)
+                ->setSourceId($item->sourceId)
+                ->setCaption($item->caption);
         });
         $agenda = new ApiAgenda();
         $agenda
-            ->setAgendaUid($agn->Uid)
-            ->setCommitteeName($agn->CommitteeName)
-            ->setCommitteeUid($agn->CommitteeUid)
-            ->setName($agn->Name)
-            ->setSourceId($agn->SourceId)
-            ->setMeetingBeginUtc($agn->MeetingBeginUtc)
-            ->setMeetingEndUtc($agn->MeetingEndUtc)
-            ->setMeetingLocation($agn->MeetingLocation)
-            ->setReleasedDate($agn->ReleasedDate)
-            ->setReleasedBy($agn->ReleasedBy)
-            ->setStatus($agn->Status)
-            ->setMinutesOfMeeting($agn->IsMinuteOfMeeting)
-            ->setIsPublic($agn->IsPublic)
-            ->setDescription($agn->Description)
-            ->setNumberOfAttendees($agn->NumberOfAttendees)
-            ->setNumberOfAbsentees($agn->NumberOfAbsentees)
-            ->setNumberOfCancellations($agn->NumberOfCancellations)
+            ->setAgendaUid($agn->uid)
+            ->setCommitteeName($agn->committeeName)
+            ->setCommitteeUid($agn->committeeUid)
+            ->setName($agn->name)
+            ->setSourceId($agn->sourceId)
+            ->setMeetingBeginUtc($agn->meetingBeginUtc)
+            ->setMeetingEndUtc($agn->meetingEndUtc)
+            ->setMeetingLocation($agn->meetingLocation)
+            ->setReleasedDate($agn->releasedDate)
+            ->setReleasedBy($agn->releasedBy)
+            ->setStatus($agn->status)
+            ->setMinutesOfMeeting($agn->isMinuteOfMeeting)
+            ->setIsPublic($agn->isPublic)
+            ->setDescription($agn->description)
+            ->setNumberOfAttendees($agn->numberOfAttendees)
+            ->setNumberOfAbsentees($agn->numberOfAbsentees)
+            ->setNumberOfCancellations($agn->numberOfCancellations)
             ->setItems($items->toArray());
 
         return $agenda;
@@ -207,36 +207,36 @@ class FirstAgendaService
         }
 
         $item = $response->getMessage();
-        $agendaItem = new ApiAgendaItem($item->Uid);
+        $agendaItem = new ApiAgendaItem($item->uid);
         $agendaItem
-            ->setAgendaUid($item->AgendaUid)
-            ->setNumber($item->Number)
-            ->setSorting($item->Sorting)
-            ->setIsOpen($item->IsOpen)
-            ->setCaseNumber($item->CaseNumber)
-            ->setSourceId($item->SourceId)
-            ->setCaption($item->Caption)
-            ->setSection($item->Section);
+            ->setAgendaUid($item->agendaUid)
+            ->setNumber($item->number)
+            ->setSorting($item->sorting)
+            ->setIsOpen($item->isOpen)
+            ->setCaseNumber($item->caseNumber)
+            ->setSourceId($item->sourceId)
+            ->setCaption($item->caption)
+            ->setSection($item->section);
 
-        if (count($item->Presentations) > 0) {
-            foreach ($item->Presentations as $presentationObj) {
+        if (count($item->presentations) > 0) {
+            foreach ($item->presentations as $presentationObj) {
                 $presentation = new Presentation();
                 $presentation
-                    ->setType($presentationObj->Type)
-                    ->setTitle($presentationObj->Title)
-                    ->setContent($presentationObj->Content)
-                    ->setDocumentId($presentationObj->DocumentUid);
+                    ->setType($presentationObj->type)
+                    ->setTitle($presentationObj->title)
+                    ->setContent($presentationObj->content)
+                    ->setDocumentId($presentationObj->documentUid);
                 $agendaItem->addPresentation($presentation);
             }
         }
 
-        if (count($item->Documents) > 0) {
-            foreach ($item->Documents as $documentObj) {
+        if (count($item->documents) > 0) {
+            foreach ($item->documents as $documentObj) {
                 $document = new Document();
                 $document
-                    ->setTitle($documentObj->Title)
-                    ->setOrder($documentObj->Order)
-                    ->setUuid($documentObj->Uid);
+                    ->setTitle($documentObj->title)
+                    ->setOrder($documentObj->order)
+                    ->setUuid($documentObj->uid);
                 $agendaItem
                     ->addDocuments($document);
             }
@@ -245,9 +245,9 @@ class FirstAgendaService
         if (isset($item->ItemDecision)) {
             $decision = new Decision();
             $decision
-                ->setCreated(Carbon::parse($item->ItemDecision->Created))
-                ->setUpdated(Carbon::parse($item->ItemDecision->Updated))
-                ->setText($item->ItemDecision->Text ?: "");
+                ->setCreated(Carbon::parse($item->ItemDecision->created))
+                ->setUpdated(Carbon::parse($item->ItemDecision->updated))
+                ->setText($item->ItemDecision->text ?: "");
             $agendaItem->setDecisionItem($decision);
         }
 
@@ -369,11 +369,16 @@ class FirstAgendaService
 
         $download = new ApiDownloadLink();
         $download
-            ->setUrl($message->DownloadUrl)
-            ->setExpiration(Carbon::parse($message->Expiration))
-            ->setErrorCode($message->ErrorCode)
-            ->setErrorMessage($message->ErrorMessage)
-            ->setHasError($message->HasError);
+            ->setUrl($message->downloadUrl)
+            ->setExpiration(Carbon::parse($message->expiration));
+
+
+        if (property_exists($message, 'hasError')) {
+            $download
+                ->setErrorCode($message->errorCode)
+                ->setErrorMessage($message->errorMessage)
+                ->setHasError($message->hasError);
+        }
 
         return $download;
     }
@@ -418,14 +423,14 @@ class FirstAgendaService
         foreach ($committees as $key => $org) {
             $committee = new ApiCommittee();
             $committee
-                ->setName($org->Name)
-                ->setSourceId($org->SourceId)
-                ->setIsPublic($org->IsPublic)
-                ->setIsHistorical($org->IsHistorical)
-                ->setShowPublicCaptionForClosedItems($org->ShowPublicCaptionForClosedItems)
-                ->setShowPublicDecisionForClosedItems($org->ShowPublicDecisionForClosedItems)
-                ->setCommitteeUid($org->CommitteeUid)
-                ->setOrganisationUid($org->OrganisationUid);
+                ->setName($org->name)
+                ->setSourceId($org->sourceId)
+                ->setIsPublic($org->isPublic)
+                ->setIsHistorical($org->isHistorical)
+                ->setShowPublicCaptionForClosedItems($org->showPublicCaptionForClosedItems)
+                ->setShowPublicDecisionForClosedItems($org->showPublicDecisionForClosedItems)
+                ->setCommitteeUid($org->committeeUid)
+                ->setOrganisationUid($org->organisationUid);
             $committees[$key] = $committee;
         }
         return $committees;
@@ -448,20 +453,20 @@ class FirstAgendaService
         foreach ($agendas as $key => $agn) {
             $agenda = new ApiAgenda();
             $agenda
-                ->setAgendaUid($agn->AgendaUid)
-                ->setOrganisationUid($agn->OrganisationUid)
-                ->setName($agn->Name)
-                ->setSourceId($agn->SourceId)
-                ->setElasticSearchResults($agn->ElasticSearchResults)
-                ->setMeetingEndUtc($agn->MeetingEndUtc)
-                ->setReleasedDate($agn->ReleasedDate)
-                ->setMinutesOfMeeting($agn->MinutesOfMeeting)
-                ->setMeetingLocation($agn->MeetingLocation);
+                ->setAgendaUid($agn->agendaUid)
+                ->setOrganisationUid($agn->organisationUid)
+                ->setName($agn->name)
+                ->setSourceId($agn->sourceId)
+                ->setElasticSearchResults($agn->elasticSearchResults)
+                ->setMeetingEndUtc($agn->meetingEndUtc)
+                ->setReleasedDate($agn->releasedDate)
+                ->setMinutesOfMeeting($agn->minutesOfMeeting)
+                ->setMeetingLocation($agn->meetingLocation);
 
-            if (isset($agn->MeetingBeginFromUtc)) {
-                $agenda->setMeetingBeginUtc($agn->MeetingBeginFromUtc);
+            if (isset($agn->meetingBeginFromUtc)) {
+                $agenda->setMeetingBeginUtc($agn->meetingBeginFromUtc);
             } else {
-                $agenda->setMeetingBeginUtc($agn->MeetingBeginUtc);
+                $agenda->setMeetingBeginUtc($agn->meetingBeginUtc);
             }
 
             $agendas[$key] = $agenda;

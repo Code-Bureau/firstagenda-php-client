@@ -1,0 +1,71 @@
+- pipeline: "Publish to Packagist"
+  events:
+  - type: "CREATE_REF"
+    refs:
+    - "refs/tags/*"
+  always_from_scratch: true
+  auto_clear_cache: true
+  fail_on_prepare_env_warning: true
+  trigger_conditions:
+  - trigger_condition: "SUCCESS_PIPELINE"
+    trigger_project_name: "firstagenda-php-client"
+    trigger_pipeline_name: "Test package for php8.0"
+  actions:
+  - action: "Execute composer install"
+    type: "BUILD"
+    docker_image_name: "library/php"
+    docker_image_tag: "8.0"
+    execute_commands:
+    - "composer validate"
+    - "composer install"
+    setup_commands:
+    - "echo \"memory_limit=-1\" >> /usr/local/etc/php/conf.d/buddy.ini"
+    - "apt-get update && apt-get install -y git zip"
+    - "curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer"
+    - ""
+    - "# php ext gd"
+    - "apt-get install -y libfreetype6-dev"
+    - "apt-get install -y libjpeg62-turbo-dev"
+    - "apt-get install -y libpng-dev"
+    - "docker-php-ext-configure gd --with-freetype --with-jpeg"
+    - "docker-php-ext-install gd"
+    - ""
+    - "# php ext pdo_mysql"
+    - "docker-php-ext-configure pdo_mysql --with-pdo-mysql"
+    - "docker-php-ext-install pdo_mysql"
+    - ""
+    - "# php ext zip"
+    - "apt-get install -y zip"
+    - "apt-get install -y unzip"
+    - "apt-get install -y zlib1g-dev"
+    - "apt-get install -y libzip-dev"
+    - "docker-php-ext-install zip"
+    shell: "BASH"
+  - action: "Execute curl -XPOST -H'content-type:application/json' 'https://packagist.org/api/update-package?username=johan.dam-davidsen&apiToken='$PACKAGIST_TOKEN -d'{\"repository\":{\"url\":\"https://packagist.org/packages/code-bureau/firstagenda-php-client\"}}'"
+    type: "BUILD"
+    docker_image_name: "library/ubuntu"
+    docker_image_tag: "20.04"
+    execute_commands:
+    - "curl -XPOST -H'content-type:application/json' 'https://packagist.org/api/update-package?username=johan.dam-davidsen&apiToken='$PACKAGIST_TOKEN -d'{\"repository\":{\"url\":\"https://packagist.org/packages/code-bureau/firstagenda-php-client\"}}'"
+    setup_commands:
+    - "apt update"
+    - "apt install curl -y"
+    shell: "BASH"
+    variables:
+    - key: "PACKAGIST_TOKEN"
+      value: "secure!XN2TB9SlRZutBV8KeMvscz5xtJ0mojuwgTxXZQyItZw=.lf/tZjmn1e0wdl9l8LYexg=="
+      type: "VAR"
+      encrypted: true
+  - action: "Send Discord message"
+    type: "DISCORD2"
+    notification_url: "https://discord.com/api/webhooks/1070410816404324424/tAXofRwzdUbeNqzkRiviY45pwHLoeeHlN-tQjyOBOONecXAnjvDF90KISRo7ymgEc6Lq"
+    content: "[#$BUDDY_EXECUTION_ID] $BUDDY_PIPELINE_NAME by $BUDDY_INVOKER_NAME"
+    attachments:
+    - "{\"title\":\"Details\",\"url\":\"$BUDDY_EXECUTION_URL\",\"fields\":[{\"name\":\"Status\",\"value\":\"Successful execution\"},{\"name\":\"Revision\",\"value\":\"$BUDDY_EXECUTION_REVISION\"},{\"name\":\"Pipeline\",\"value\":\"$BUDDY_PIPELINE_NAME\"},{\"name\":\"Project\",\"value\":\"$BUDDY_PROJECT_NAME\"}]}"
+  - action: "Send Discord message-1"
+    type: "DISCORD2"
+    trigger_time: "ON_FAILURE"
+    notification_url: "https://discord.com/api/webhooks/1070410816404324424/tAXofRwzdUbeNqzkRiviY45pwHLoeeHlN-tQjyOBOONecXAnjvDF90KISRo7ymgEc6Lq"
+    content: "[#$BUDDY_EXECUTION_ID] $BUDDY_PIPELINE_NAME by $BUDDY_INVOKER_NAME"
+    attachments:
+    - "{\"title\":\"Details\",\"url\":\"$BUDDY_EXECUTION_URL\",\"fields\":[{\"name\":\"Status\",\"value\":\"Failed execution\"},{\"name\":\"Revision\",\"value\":\"$BUDDY_EXECUTION_REVISION\"},{\"name\":\"Pipeline\",\"value\":\"$BUDDY_PIPELINE_NAME\"},{\"name\":\"Project\",\"value\":\"$BUDDY_PROJECT_NAME\"}]}"
